@@ -1,0 +1,9 @@
+A simple entity component system manager with a simple example.
+
+To use:
+
+Subclass the Component class for components. e.g. Speed Position etc. These are for holding properties.
+
+Subclass the System class for adding systems. e.g. Movement. This is where logic will be perfored, you'll need to override the pure update method.
+
+Use the SystemManager to add entities. See the example code.
