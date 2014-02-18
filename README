@@ -4,6 +4,8 @@ To use:
 
 Subclass the Component class for components. e.g. Speed Position etc. These are for holding properties.
 
-Subclass the System class for adding systems. e.g. Movement. This is where logic will be perfored, you'll need to override the pure update method.
+Subclass the System class for adding systems. e.g. Movement. This is where logic will be performed, you'll need to override the pure update method.
+
+You'll need factory methods to provide unique_ptrs for your subclasses. Also you'll need to define the MAX constant in the ECS namespace and the ecsint type (should eb unsigned for the binary arithmetic), I need to find a better way of doing this.
 
 Use the SystemManager to add entities. See the example code.
