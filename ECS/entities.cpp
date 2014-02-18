@@ -2,11 +2,9 @@
 #include "component.h"
 #include <iostream>
 using namespace ECS;
-Entities::Entities()
+Entities::Entities(const ecsint MAX):MAX(MAX),m_components(MAX)
 {
-//    m_components.reserve(MAX);
-//    for(ecsint i = 0; i < MAX; i++)
-//        m_components[i] = 0;
+
 }
 
 

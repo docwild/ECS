@@ -2,7 +2,7 @@
 #define SYSTEMFACTORY_H
 #include <memory>
 #include "ECS/system.h"
-#include "ECS.h"
+#include "ECS/ECS.h"
 enum SENUM:ECS::ecsint
 {
     SMOVEMENT = 1 << 0,

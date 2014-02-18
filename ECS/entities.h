@@ -1,16 +1,16 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
-#include <array>
+#include <vector>
 #include <memory>
 #include "component.h"
-#include "../ECS.h"
+#include "ECS.h"
 namespace ECS
 {
 
 class Entities
 {
 public:
-    Entities();
+    Entities(const ECS::ecsint MAX);
     Entities(Entities const&) = delete; //no copying
     Entities& operator=(Entities const&) = delete; //no copying
     const ecsint components(const ecsint index) const;
@@ -23,8 +23,8 @@ public:
     const bool hasComponents(const ecsint &index) const;
     const bool hasComponents(const ecsint &index,const ecsint &components) const;
 private:
-
-    std::array<ecsint,MAX>m_components;
+    const ecsint MAX;
+    std::vector<ecsint> m_components;
 };
 }
 #endif // ENTITIES_H

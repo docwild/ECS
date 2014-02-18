@@ -16,7 +16,7 @@
 //#include "Systems/smovement.h"
 //#include "Systems/sinput.h"
 //#include "Systems/sscenegraph.h"
-#include "../ECS.h"
+#include "ECS.h"
 //#include <SFML/Window/Event.hpp>
 //#include <Aurora/Dispatch.hpp>
 namespace ECS
@@ -39,7 +39,7 @@ class SystemManager
     typedef std::unordered_map<ecsint,sysVecSP> sysMap;
 public:
 
-    SystemManager();
+    explicit SystemManager(const ECS::ecsint MAX);
     ~SystemManager();
     unsigned int addEntity(const ecsint &systems,const ecsint &component, compFactoryFunction cf, sysFactoryFunction sf);
     template<class T1,class T2,class T3>
@@ -83,6 +83,7 @@ private:
 
     compMap m_componentMap;
     sysMap m_systemMap;
+    const ecsint MAX;
 
 
 

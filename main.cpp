@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cassert>
-//#include "ECS.h"
+#include "ECS/ECS.h"
 #include "ECS/systemmanager.h"
 
 #include "component_factory.h"
@@ -15,11 +15,13 @@ using namespace ECS;
 
 int main()
 {
+    const ECS::ecsint MAX = 50;
     compFactory m_compFact;
+
     systemFactory m_sysFact;
     typedef std::unordered_map<ECS::ecsint,std::vector<std::unique_ptr<ECS::System>>> sysMap;
     typedef std::unordered_map<ECS::ecsint,std::vector<std::unique_ptr<ECS::Component>>> compMap;
-    SystemManager sysman;
+    SystemManager sysman(MAX);
     bool ok = true;
 
     ok &= sysman.registerCompType(CENUM::CPOSITION,"Position");
@@ -52,11 +54,9 @@ int main()
 
 
     ECS::Component *comp2 = sysman.getObject<ECS::Component,compMap>(CENUM::CPOSITION,nonplay,sysman.componentMap());
-//    ECS::CPosition *cposition = dynamic_cast<ECS::CPosition*>(comp);
-//    std::cout <<"comp2 name= "<<comp2->name()<<std::endl;
-    //    ECS::CPosition *cmo = static_cast<ECS::CPosition*>(comp);
+
     assert(cspeed && comp && comp2);
-    //    cmo->setX(10);
+
     int x = 0;
 
     std::vector<Component*> cv{comp,cspeed};

@@ -2,7 +2,7 @@
 #define SYSTEM_H
 #include <vector>
 #include "component.h"
-#include "../ECS.h"
+#include "ECS.h"
 namespace ECS
 {
 class System
@@ -15,6 +15,7 @@ public:
     virtual void update(const ecsint &index, const std::vector<Component*> &vec)=0;
 protected:
     std::string m_name;
+    unsigned int delay{0};
 };
 }
 #endif // SYSTEM_H

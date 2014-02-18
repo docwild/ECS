@@ -2,11 +2,11 @@
 #include <iostream>
 #include <cassert>
 using namespace ECS;
-SystemManager::SystemManager()
 
+
+SystemManager::SystemManager(const ecsint MAX):MAX(MAX)
 {
-m_entities.reset( new Entities());
-
+m_entities.reset( new Entities(MAX));
 }
 
 SystemManager::~SystemManager()

@@ -2,7 +2,7 @@
 #define COMPONENT_FACTORY_H
 #include <string>
 #include <memory>
-#include "ECS.h"
+#include "ECS/ECS.h"
 #include "ECS/component.h"
 //#include "ECS/Components/cactions.h"
 //#include "ECS/Components/cbounds.h"
