@@ -28,11 +28,11 @@ void SystemManager::removeComponent(const ecsint &component, const ecsint &index
 void SystemManager::removeComponentVector(const ecsint &index, const ecsint &component)
 {
 
-    for(auto &ct: m_compTypes)
-    {
-        if((component & ct.first) == ct.first)
-            m_componentMap[ct.first][index] = nullptr;
-    }
+//    for(auto &ct: m_compTypes)
+//    {
+//        if((component & ct.first) == ct.first)
+//            m_componentMap[ct.first][index] = nullptr;
+//    }
 
 }
 
@@ -40,22 +40,43 @@ bool SystemManager::buildCompArrays()
 {
     if(m_compTypes.empty())
         return false;
-    for(auto &ct: m_compTypes)
-    {
-        m_componentMap[ct.first] =std::vector<compSp>(MAX);
-    }
-    return true;
+
+
+//    const auto &ent = m_entities->components();
+//    for (ecsint i = 0; i < ent.size(); i++)
+//    {
+//        if(ent[i])
+//        {
+
+
+//            for(auto &ct:m_compTypes)
+//            {
+////                m_componentMap[i].first = ct.first;
+////                m_componentMap[i].second = compVecSP();
+////                m_componentMap[i] = compMap2{ct.first,compSp()};
+////                m_componentMap[i].second.first = ct.first;
+////                m_componentMap.emplace(i,m_componentMap.emplace(ct.first,compVecSP()));
+//                std::cout<<"x";
+//            }
+//        }
+//    }
+
+//    for(auto &ct: m_compTypes)
+//    {
+//        m_componentMap[ct.first] =std::vector<compSp>(MAX);
+//    }
+//    return true;
 }
 
 bool SystemManager::buildSysArrays()
 {
     if(m_sysTypes.empty())
         return false;
-    for(const auto &st : m_sysTypes)
-    {
-        m_systemMap[st.first] = std::vector<sysSp>(MAX);
-    }
-    return true;
+//    for(const auto &st : m_sysTypes)
+//    {
+//        m_systemMap[st.first] = std::vector<sysSp>(MAX);
+//    }
+//    return true;
 }
 
 const SystemManager::sysMap &SystemManager::systemMap() const
@@ -106,25 +127,32 @@ unsigned int SystemManager::addEntity(const ecsint &systems, const ecsint &compo
 {
     if(component == 0)
         return MAX;
-    if(m_componentMap.empty())
-        throw MAX;
+//    if(m_componentMap.empty())
+//        throw MAX;
     ecsint index = m_entities->addEntity(component);
     if(index == MAX)
         throw MAX;
     m_entities->setComponents(index,component);
-    addToMap(component,index,m_compTypes,cf,m_componentMap);
-    addToMap(systems,index,m_sysTypes,sf,m_systemMap);
+    addToMap(component,index,m_compTypes,cf,m_componentMap,compMapSP());
+    addToMap(systems,index,m_sysTypes,sf,m_systemMap,sysMapSP());
     return index;
 }
 
 void SystemManager::update()
 {
-    for(auto &s: m_systemMap)
+    for(auto &sys: m_systemMap)
     {
-        for(auto &v: s.second)
+        std::cout<<"update "<<sys.first<<std::endl;
+        for(auto &sys2:sys.second)
         {
-            if(v)
-                std::cout << "up " << v->name() <<std::endl;
+            std::cout<<"system "<<sys2.first<<std::endl;
+            compVec comps;
+            for(auto &vecs:m_componentMap[sys.first])
+            {
+                std::cout<<"component "<<vecs.first<<std::endl;
+                comps.push_back(vecs.second.get());
+            }
+            sys2.second->update(sys.first,comps);
         }
     }
 }

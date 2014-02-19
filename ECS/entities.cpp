@@ -9,9 +9,9 @@ Entities::Entities(const ecsint MAX):MAX(MAX),m_components(MAX)
 
 
 
-const ecsint Entities::components(const ecsint index) const
+const std::vector<ecsint> &Entities::components() const
 {
-    return m_components[index];
+    return m_components;
 }
 
 void Entities::setComponents(const ecsint &index, const ecsint &comp)

@@ -5,9 +5,10 @@
 #include "ECS/ECS.h"
 enum SENUM:ECS::ecsint
 {
-    SMOVEMENT = 1 << 0,
+
+    SINPUT = 1 << 0,
     SPOSITION = 1 << 1,
-    SINPUT = 1 << 2,
+    SMOVEMENT = 1 << 2,
     SACTIONS = 1 << 3,
     SBOUNDS = 1 << 4
 

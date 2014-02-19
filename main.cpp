@@ -19,30 +19,17 @@ int main()
     compFactory m_compFact;
 
     systemFactory m_sysFact;
-    typedef std::unordered_map<ECS::ecsint,std::vector<std::unique_ptr<ECS::System>>> sysMap;
-    typedef std::unordered_map<ECS::ecsint,std::vector<std::unique_ptr<ECS::Component>>> compMap;
-    typedef std::unordered_map<ECS::ecsint,std::string> registerMap;
     SystemManager sysman(MAX);
     bool ok = true;
 
     ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
     ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
-    ok &= sysman.buildCompArrays();
+
     ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
-    ok &= sysman.buildSysArrays();
+
     if(!ok)
         return(100);
 
-
-//    {
-//        const SystemManager *cm = &sysman;
-//        const registerMap rm =  cm->sysTypes();
-//        for(const auto &c: rm)
-//        {
-//            std::cout << c.first<<std::endl;
-//            std::cout << c.second<<std::endl;
-//        }
-//    }
 
     ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
                                         CENUM::CPOSITION|CENUM::CSPEED,
@@ -51,22 +38,28 @@ int main()
                                            CENUM::CPOSITION,
                                            m_compFact,m_sysFact);
 
-    ECS::System *sys = sysman.getObject<ECS::System,sysMap>(SENUM::SMOVEMENT,play,sysman.systemMap());
+
+    ECS::System *sys = sysman.getObject<ECS::System,ECS::SystemManager::sysMap>
+            (SENUM::SMOVEMENT,play,sysman.systemMap());
     ECS::SMovement *smo = static_cast<ECS::SMovement*>(sys);
     assert(smo);
 
-    ECS::System *sys2 = sysman.getObject<ECS::System,sysMap>(SENUM::SMOVEMENT,nonplay,sysman.systemMap());
+    ECS::System *sys2 = sysman.getObject<ECS::System,ECS::SystemManager::sysMap>
+            (SENUM::SMOVEMENT,nonplay,sysman.systemMap());
     ECS::SMovement *smo2 = static_cast<ECS::SMovement*>(sys);
     assert(smo2);
 
 
-    ECS::Component *comp = sysman.getObject<ECS::Component,compMap>(CENUM::CSPEED,play,sysman.componentMap());
+    ECS::Component *comp = sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
+            (CENUM::CSPEED,play,sysman.componentMap());
     ECS::CSpeed *cspeed = dynamic_cast<ECS::CSpeed*>(comp);
 
-    comp = sysman.getObject<ECS::Component,compMap>(CENUM::CPOSITION,play,sysman.componentMap());
+    comp = sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
+            (CENUM::CPOSITION,play,sysman.componentMap());
 
 
-    ECS::Component *comp2 = sysman.getObject<ECS::Component,compMap>(CENUM::CPOSITION,nonplay,sysman.componentMap());
+    ECS::Component *comp2 = sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
+            (CENUM::CPOSITION,nonplay,sysman.componentMap());
 
     assert(cspeed && comp && comp2);
 

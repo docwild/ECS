@@ -13,7 +13,7 @@ public:
     Entities(const ECS::ecsint MAX);
     Entities(Entities const&) = delete; //no copying
     Entities& operator=(Entities const&) = delete; //no copying
-    const ecsint components(const ecsint index) const;
+    const std::vector<ecsint> &components() const;
     void setComponents(const ecsint &index, const ecsint &comp);
     ecsint addEntity(const ecsint &comp);
 

@@ -31,28 +31,29 @@ class SystemManager
     typedef std::unique_ptr<Component> compSp;
     typedef std::unique_ptr<System> sysSp;
 
-    typedef std::vector<compSp> compVecSP;
-    typedef std::vector<sysSp> sysVecSP;
+    typedef std::vector<Component*> compVec;
 
-    typedef std::vector<Component *> compVecRP;
-    typedef std::unordered_map<ecsint,compVecSP> compMap;
-    typedef std::unordered_map<ecsint,sysSp> sysMap;
+    typedef std::unordered_map<ecsint,compSp> compMapSP;
+
+    typedef std::unordered_map<ecsint,sysSp> sysMapSP;
 public:
-
+    typedef std::unordered_map<ecsint,compMapSP> compMap;
+    typedef std::unordered_map<ecsint,sysMapSP> sysMap;
     explicit SystemManager(const ECS::ecsint MAX);
     ~SystemManager();
     unsigned int addEntity(const ecsint &systems,const ecsint &component, compFactoryFunction cf, sysFactoryFunction sf);
-    template<class T1,class T2,class T3>
-    void  addToMap(const ecsint &bits, const ecsint &index, T1 &mapType, T2 factory,T3 &map)
+    template<class T1,class T2,class T3,class T4>
+    void  addToMap(const ecsint &bits, const ecsint &index, T1 &mapType, T2 factory,T3 &map, T4 mapVec)
     {
         for (const auto &st: mapType)
         {
+
             if((st.first & bits) == st.first)
             {
-                map[st.first][index] = factory(st.first,st.second);
+                mapVec[st.first] = factory(st.first,st.second);
             }
-
         }
+        map[index] = std::move(mapVec);
     }
     void removeComponent(const ecsint &component,const ecsint &index);
     void removeComponentVector(const ecsint &index, const ecsint &component);
@@ -73,16 +74,16 @@ public:
 
     bool buildCompArrays();
     bool buildSysArrays();
+
     template<class T1,class T2>
     T1 *getObject(const ecsint id, const ecsint &index,T2 &map)
     {
-        return map[id][index].get();
+        return map[index][id].get();
     }
-
-
 
     const sysMap &systemMap() const;
     sysMap &systemMap();
+
     const compMap &componentMap() const;
     compMap &componentMap();
 
@@ -100,11 +101,6 @@ private:
     compMap m_componentMap;
     sysMap m_systemMap;
     const ecsint MAX;
-
-
-
-
-
 };
 }
 #endif // SYSTEMMANAGER_H
