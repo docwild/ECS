@@ -10,7 +10,8 @@ class SMovement : public System
 public:
     explicit SMovement(std::string name,ECS::ecsint eid);
     void update();
-    void attachComponent(ecsint eid, Component *comp) override;
+    bool attachComponent(ecsint eid, Component *comp) override;
+    bool detachComponent(ecsint cid) override;
 private:
     ECS::CSpeed *m_cSpeed;
     ECS::CPosition *m_cPosition;

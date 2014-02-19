@@ -4,9 +4,29 @@ System::System(std::string name, ecsint eid):m_name(name),m_entityId(eid)
 {
 }
 
-void System::attachComponent(ecsint eid, Component *comp)
+bool System::attachComponent(ecsint cid, Component *comp)
 {
-    m_compMap[eid] = comp;
+    auto it = m_compMap.find(cid);
+    if(it == m_compMap.end())
+    {
+        m_compMap[cid] = comp;
+        return true;
+    }
+    return false;
+}
+
+bool System::detachComponent(ecsint cid)
+{
+    //    m_compMap[cid] = nullptr;
+    auto it = m_compMap.find(cid);
+    if(it != m_compMap.end())
+    {
+        m_compMap.erase(it);
+        return true;
+    }
+    return false;
+
+
 }
 std::string System::name() const
 {

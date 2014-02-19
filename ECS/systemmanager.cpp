@@ -107,4 +107,27 @@ void SystemManager::update()
     }
 }
 
+bool SystemManager::attachComponent(System *sys, ecsint cid)
+{
+    Component *c = getComponent(sys->entityId(),cid);
+    if(!c)
+        return false;
+    return sys->attachComponent(cid,c);
+}
+
+bool SystemManager::detachComponent(System *sys, ecsint cid)
+{
+    return sys->detachComponent(cid);
+}
+
+Component *SystemManager::getComponent(ecsint eid, ecsint cid)
+{
+    return m_componentMap[eid][cid].get();
+}
+
+System *SystemManager::getSystem(ecsint eid, ecsint id)
+{
+    return m_systemMap[eid][id].get();
+}
+
 

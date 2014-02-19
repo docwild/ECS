@@ -14,7 +14,8 @@ public:
     System& operator=(System const&) = delete; //no copying
     virtual ~System(){};
     virtual void update()=0;
-    virtual void attachComponent(ecsint eid, Component *comp);
+    virtual bool attachComponent(ecsint cid, Component *comp);
+    virtual bool detachComponent(ecsint cid);
     std::string name() const;
     void setName(const std::string &name);
 

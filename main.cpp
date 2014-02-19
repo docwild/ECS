@@ -10,6 +10,7 @@
 #include "cspeed.h"
 
 #include <unistd.h>
+#include <functional>
 
 using namespace ECS;
 
@@ -38,26 +39,22 @@ int main()
                                            m_compFact,m_sysFact);
 
 
-    ECS::System *sys = sysman.getObject<ECS::System,ECS::SystemManager::sysMap>
-            (SENUM::SMOVEMENT,play,sysman.systemMap());
-    ECS::SMovement *smo = static_cast<ECS::SMovement*>(sys);
+    ECS::System *smo = sysman.getSystem(play,SENUM::SMOVEMENT);
     assert(smo);
 
-    sys = sysman.getObject<ECS::System,ECS::SystemManager::sysMap>
-            (SENUM::SMOVEMENT,nonplay,sysman.systemMap());
-    ECS::SMovement *smo2 = static_cast<ECS::SMovement*>(sys);
+    ECS::System *smo2 = sysman.getSystem(nonplay,SENUM::SMOVEMENT);
     assert(smo2);
 
+    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
+    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
+//    ok &= sysman.attachComponent(smo,CENUM::CACTIONS);
 
+    ok &= sysman.attachComponent(smo2,CENUM::CPOSITION);
 
-    smo->attachComponent(CENUM::CSPEED,sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
-                         (CENUM::CSPEED,play,sysman.componentMap()));
-
-    smo->attachComponent(CENUM::CPOSITION,sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
-                         (CENUM::CPOSITION,play,sysman.componentMap()));
-
-    smo2->attachComponent(CENUM::CPOSITION,sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
-                          (CENUM::CPOSITION,nonplay,sysman.componentMap()));
+    if(!ok)
+    {
+        return(101);
+    }
 
     //show attachments
     std::unordered_map<ecsint,Component*> req;// = smo->compMap();
@@ -70,15 +67,30 @@ int main()
             std::cout<<"Attachment: "<<c.second->name()<<std::endl;
         }
     }
+    typedef std::function<bool (System*,ECS::ecsint)> func;
+    auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
+    auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
+    std::vector<func> vfunc{funcptr,funcptr2};
 
-
-    int x = 0;
-
-    while (x++ < 15)
+    for(int i = 0; i < 3; i++)
     {
-        sysman.update();
-        sleep(1);
+        int x = 0;
+
+        while (x++ < 5)
+        {
+            sysman.update();
+            sleep(1);
+        }
+
+        ok &= vfunc[i%2](smo,CENUM::CSPEED);
+        if(!ok)
+        {
+            std::cout<<"Could not attach/detach"<<std::endl;
+            break;
+        }
     }
+
+
     return 0;
 }
 

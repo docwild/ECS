@@ -55,7 +55,8 @@ public:
     void removeComponent(const ecsint &component,const ecsint &index);
     void removeComponentVector(const ecsint &index, const ecsint &component);
     void update();
-
+    bool attachComponent(System *sys, ecsint cid);
+    bool detachComponent(System *sys, ecsint cid);
     template<class T1>
     bool registerType(ECS::ecsint eid, std::string sid, T1 &map)
     {
@@ -69,12 +70,8 @@ public:
         return false;
     }
 
-    template<class T1,class T2>
-    T1 *getObject(const ecsint id, const ecsint &index,T2 &map)
-    {
-        return map[index][id].get();
-    }
-
+    Component *getComponent(ecsint eid, ecsint cid);
+    System *getSystem(ecsint eid, ecsint id);
     const sysMap &systemMap() const;
     sysMap &systemMap();
 
