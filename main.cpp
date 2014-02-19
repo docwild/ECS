@@ -32,12 +32,24 @@ int main()
     ok &= sysman.buildSysArrays();
     if(!ok)
         return(100);
+
+
+//    {
+//        const SystemManager *cm = &sysman;
+//        const registerMap rm =  cm->sysTypes();
+//        for(const auto &c: rm)
+//        {
+//            std::cout << c.first<<std::endl;
+//            std::cout << c.second<<std::endl;
+//        }
+//    }
+
     ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
                                         CENUM::CPOSITION|CENUM::CSPEED,
                                         m_compFact,m_sysFact);
     ECS::ecsint nonplay = sysman.addEntity(SENUM::SMOVEMENT,
-                                        CENUM::CPOSITION,
-                                        m_compFact,m_sysFact);
+                                           CENUM::CPOSITION,
+                                           m_compFact,m_sysFact);
 
     ECS::System *sys = sysman.getObject<ECS::System,sysMap>(SENUM::SMOVEMENT,play,sysman.systemMap());
     ECS::SMovement *smo = static_cast<ECS::SMovement*>(sys);
@@ -59,18 +71,18 @@ int main()
     assert(cspeed && comp && comp2);
 
     int x = 0;
+    sysman.update();
+//    std::vector<Component*> cv{comp,cspeed};
+//    std::vector<Component*> cv2{comp2};
+//    cspeed->setX(cspeed->getX()+5);
+//    while (x++ < 5)
+//    {
 
-    std::vector<Component*> cv{comp,cspeed};
-    std::vector<Component*> cv2{comp2};
-    cspeed->setX(cspeed->getX()+5);
-    while (x++ < 5)
-    {
+//        smo->update(play,cv);
+//        smo2->update(nonplay,cv2);
 
-        smo->update(play,cv);
-        smo2->update(nonplay,cv2);
-
-        sleep(1);
-    }
+//        sleep(1);
+//    }
     return 0;
 }
 

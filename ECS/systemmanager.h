@@ -36,7 +36,7 @@ class SystemManager
 
     typedef std::vector<Component *> compVecRP;
     typedef std::unordered_map<ecsint,compVecSP> compMap;
-    typedef std::unordered_map<ecsint,sysVecSP> sysMap;
+    typedef std::unordered_map<ecsint,sysSp> sysMap;
 public:
 
     explicit SystemManager(const ECS::ecsint MAX);
@@ -56,7 +56,7 @@ public:
     }
     void removeComponent(const ecsint &component,const ecsint &index);
     void removeComponentVector(const ecsint &index, const ecsint &component);
-    void update(bool inputFlag);
+    void update();
 
     template<class T1>
     bool registerType(ECS::ecsint eid, std::string sid, T1 &map)

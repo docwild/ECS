@@ -117,9 +117,16 @@ unsigned int SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     return index;
 }
 
-void SystemManager::update(bool inputFlag)
+void SystemManager::update()
 {
-
+    for(auto &s: m_systemMap)
+    {
+        for(auto &v: s.second)
+        {
+            if(v)
+                std::cout << "up " << v->name() <<std::endl;
+        }
+    }
 }
 
 

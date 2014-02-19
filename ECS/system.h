@@ -13,6 +13,9 @@ public:
     System& operator=(System const&) = delete; //no copying
     virtual ~System(){};
     virtual void update(const ecsint &index, const std::vector<Component*> &vec)=0;
+    std::string name() const;
+    void setName(const std::string &name);
+
 protected:
     std::string m_name;
     unsigned int delay{0};
