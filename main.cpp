@@ -21,13 +21,14 @@ int main()
     systemFactory m_sysFact;
     typedef std::unordered_map<ECS::ecsint,std::vector<std::unique_ptr<ECS::System>>> sysMap;
     typedef std::unordered_map<ECS::ecsint,std::vector<std::unique_ptr<ECS::Component>>> compMap;
+    typedef std::unordered_map<ECS::ecsint,std::string> registerMap;
     SystemManager sysman(MAX);
     bool ok = true;
 
-    ok &= sysman.registerCompType(CENUM::CPOSITION,"Position");
-    ok &= sysman.registerCompType(CENUM::CSPEED,"Speed");
+    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+    ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
     ok &= sysman.buildCompArrays();
-    ok &= sysman.registerSysType(SENUM::SMOVEMENT,"Movement");
+    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
     ok &= sysman.buildSysArrays();
     if(!ok)
         return(100);

@@ -36,41 +36,6 @@ void SystemManager::removeComponentVector(const ecsint &index, const ecsint &com
 
 }
 
-bool SystemManager::registerCompType(ecsint eid, std::string sid)
-{
-    registerMap::const_iterator it;
-    it = m_compTypes.find(eid);
-    if(it == m_compTypes.end())
-    {
-        m_compTypes[eid] = sid;
-        return true;
-    }
-    return false;
-}
-
-bool SystemManager::deregisterCompType(ecsint eid)
-{
-    registerMap::const_iterator it;
-    it = m_compTypes.find(eid);
-    if(it != m_compTypes.end())
-    {
-        m_compTypes.erase(it);
-        return true;
-    }
-    return false;
-}
-
-bool SystemManager::registerSysType(ecsint eid, std::string sid)
-{
-   const auto it = m_sysTypes.find(eid);
-   if(it == m_sysTypes.end())
-   {
-       m_sysTypes[eid] = sid;
-       return true;
-   }
-   return false;
-}
-
 bool SystemManager::buildCompArrays()
 {
     if(m_compTypes.empty())
@@ -98,10 +63,44 @@ const SystemManager::sysMap &SystemManager::systemMap() const
     return m_systemMap;
 }
 
+SystemManager::sysMap &SystemManager::systemMap()
+{
+    return const_cast<SystemManager::sysMap&>(static_cast<const SystemManager*>(this)->systemMap());
+}
+
 const SystemManager::compMap &SystemManager::componentMap() const
 {
     return m_componentMap;
 }
+
+SystemManager::compMap &SystemManager::componentMap()
+{
+    return const_cast<SystemManager::compMap&>(static_cast<const SystemManager*>(this)->componentMap());
+}
+const SystemManager::registerMap &SystemManager::compTypes() const
+{
+    return m_compTypes;
+}
+
+SystemManager::registerMap &SystemManager::compTypes()
+{
+    return const_cast<SystemManager::registerMap&>(static_cast<const SystemManager*>(this)->compTypes());
+}
+
+
+const SystemManager::registerMap &SystemManager::sysTypes() const
+{
+    return m_sysTypes;
+}
+
+SystemManager::registerMap &SystemManager::sysTypes()
+{
+    return const_cast<SystemManager::registerMap&>(static_cast<const SystemManager*>(this)->sysTypes());
+}
+
+
+
+
 
 unsigned int SystemManager::addEntity(const ecsint &systems, const ecsint &component, compFactoryFunction cf, sysFactoryFunction sf)
 {

@@ -55,26 +55,42 @@ public:
         }
     }
     void removeComponent(const ecsint &component,const ecsint &index);
-//    void toggleComponent(const ecsint &component, const ecsint &index);
     void removeComponentVector(const ecsint &index, const ecsint &component);
     void update(bool inputFlag);
 
-    bool registerCompType(ECS::ecsint eid, std::string sid);
-    bool deregisterCompType(ECS::ecsint eid);
-    bool registerSysType(ECS::ecsint eid, std::string sid);
+    template<class T1>
+    bool registerType(ECS::ecsint eid, std::string sid, T1 &map)
+    {
+
+        const auto it = map.find(eid);
+        if(it == map.end())
+        {
+            map[eid] = sid;
+            return true;
+        }
+        return false;
+    }
+
     bool buildCompArrays();
     bool buildSysArrays();
     template<class T1,class T2>
-    T1 *getObject(const ecsint id, const ecsint &index,const T2 &map)
+    T1 *getObject(const ecsint id, const ecsint &index,T2 &map)
     {
-        return const_cast<T2&>(map)[id][index].get();
-//        return map[id][index].get();
+        return map[id][index].get();
     }
 
 
 
     const sysMap &systemMap() const;
+    sysMap &systemMap();
     const compMap &componentMap() const;
+    compMap &componentMap();
+
+    const registerMap &compTypes() const;
+    registerMap &compTypes();
+
+    const registerMap &sysTypes() const;
+    registerMap &sysTypes();
 
 private:
     registerMap m_compTypes;
