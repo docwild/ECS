@@ -24,7 +24,6 @@ int main()
 
     ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
     ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
-
     ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
@@ -44,38 +43,42 @@ int main()
     ECS::SMovement *smo = static_cast<ECS::SMovement*>(sys);
     assert(smo);
 
-    ECS::System *sys2 = sysman.getObject<ECS::System,ECS::SystemManager::sysMap>
+    sys = sysman.getObject<ECS::System,ECS::SystemManager::sysMap>
             (SENUM::SMOVEMENT,nonplay,sysman.systemMap());
     ECS::SMovement *smo2 = static_cast<ECS::SMovement*>(sys);
     assert(smo2);
 
 
-    ECS::Component *comp = sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
-            (CENUM::CSPEED,play,sysman.componentMap());
-    ECS::CSpeed *cspeed = dynamic_cast<ECS::CSpeed*>(comp);
 
-    comp = sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
-            (CENUM::CPOSITION,play,sysman.componentMap());
+    smo->attachComponent(CENUM::CSPEED,sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
+                         (CENUM::CSPEED,play,sysman.componentMap()));
 
+    smo->attachComponent(CENUM::CPOSITION,sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
+                         (CENUM::CPOSITION,play,sysman.componentMap()));
 
-    ECS::Component *comp2 = sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
-            (CENUM::CPOSITION,nonplay,sysman.componentMap());
+    smo2->attachComponent(CENUM::CPOSITION,sysman.getObject<ECS::Component,ECS::SystemManager::compMap>
+                          (CENUM::CPOSITION,nonplay,sysman.componentMap()));
 
-    assert(cspeed && comp && comp2);
+    //show attachments
+    std::unordered_map<ecsint,Component*> req;// = smo->compMap();
+    for(auto i: std::vector<System*>{smo,smo2})
+    {
+        req = i->compMap();
+        std::cout <<i->name()<<" System attachments for entity: "<<i->entityId()<<std::endl;
+        for(auto c: req)
+        {
+            std::cout<<"Attachment: "<<c.second->name()<<std::endl;
+        }
+    }
+
 
     int x = 0;
-    sysman.update();
-//    std::vector<Component*> cv{comp,cspeed};
-//    std::vector<Component*> cv2{comp2};
-//    cspeed->setX(cspeed->getX()+5);
-//    while (x++ < 5)
-//    {
 
-//        smo->update(play,cv);
-//        smo2->update(nonplay,cv2);
-
-//        sleep(1);
-//    }
+    while (x++ < 15)
+    {
+        sysman.update();
+        sleep(1);
+    }
     return 0;
 }
 

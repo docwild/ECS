@@ -25,20 +25,17 @@ class SystemManager
 {
 
     typedef std::unordered_map<ECS::ecsint,std::string> registerMap;
-    typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint,std::string)> compFactoryFunction;
-    typedef std::function<std::unique_ptr<ECS::System> (ECS::ecsint,std::string)> sysFactoryFunction;
+    typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint,std::string,ECS::ecsint)> compFactoryFunction;
+    typedef std::function<std::unique_ptr<ECS::System> (ECS::ecsint,std::string,ECS::ecsint)> sysFactoryFunction;
 
-    typedef std::unique_ptr<Component> compSp;
-    typedef std::unique_ptr<System> sysSp;
+    typedef std::unique_ptr<Component> compUp;
+    typedef std::unique_ptr<System> sysUp;
 
-    typedef std::vector<Component*> compVec;
-
-    typedef std::unordered_map<ecsint,compSp> compMapSP;
-
-    typedef std::unordered_map<ecsint,sysSp> sysMapSP;
+    typedef std::unordered_map<ecsint,compUp> compMapUP;
+    typedef std::unordered_map<ecsint,sysUp> sysMapUP;
 public:
-    typedef std::unordered_map<ecsint,compMapSP> compMap;
-    typedef std::unordered_map<ecsint,sysMapSP> sysMap;
+    typedef std::unordered_map<ecsint,compMapUP> compMap;
+    typedef std::unordered_map<ecsint,sysMapUP> sysMap;
     explicit SystemManager(const ECS::ecsint MAX);
     ~SystemManager();
     unsigned int addEntity(const ecsint &systems,const ecsint &component, compFactoryFunction cf, sysFactoryFunction sf);
@@ -50,7 +47,7 @@ public:
 
             if((st.first & bits) == st.first)
             {
-                mapVec[st.first] = factory(st.first,st.second);
+                mapVec[st.first] = factory(st.first,st.second,index);
             }
         }
         map[index] = std::move(mapVec);
@@ -71,9 +68,6 @@ public:
         }
         return false;
     }
-
-    bool buildCompArrays();
-    bool buildSysArrays();
 
     template<class T1,class T2>
     T1 *getObject(const ecsint id, const ecsint &index,T2 &map)

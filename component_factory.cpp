@@ -1,7 +1,7 @@
 #include "component_factory.h"
 #include "cposition.h"
 #include "cspeed.h"
-std::unique_ptr<ECS::Component> compFactory::operator() (ECS::ecsint type,std::string name)
+std::unique_ptr<ECS::Component> compFactory::operator() (ECS::ecsint type,std::string name,ECS::ecsint eid)
 {
     switch(type)
     {
@@ -13,9 +13,9 @@ std::unique_ptr<ECS::Component> compFactory::operator() (ECS::ecsint type,std::s
 //    case CINPUT:
 //        return std::unique_ptr<ECS::Component>(new ECS::CInput(name));
     case CPOSITION:
-        return std::unique_ptr<ECS::Component>(new ECS::CPosition(name));
+        return std::unique_ptr<ECS::Component>(new ECS::CPosition(name,eid));
     case CSPEED:
-        return std::unique_ptr<ECS::Component>(new ECS::CSpeed(name));
+        return std::unique_ptr<ECS::Component>(new ECS::CSpeed(name,eid));
 //    case CSPRITE:
 //        return std::unique_ptr<ECS::Component>(new ECS::CSprite(name));
     default:

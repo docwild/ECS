@@ -23,6 +23,6 @@ enum CENUM:ECS::ecsint
 class compFactory
 {
 public:
-    std::unique_ptr<ECS::Component> operator() (ECS::ecsint type,std::string name);
+    std::unique_ptr<ECS::Component> operator() (ECS::ecsint type,std::string name,ECS::ecsint eid);
 };
 #endif // COMPONENT_FACTORY_H

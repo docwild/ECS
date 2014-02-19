@@ -1,6 +1,6 @@
 #include "cposition.h"
 using namespace ECS;
-CPosition::CPosition(std::string name):Component(name)
+CPosition::CPosition(std::string name,ECS::ecsint eid):Component(name,eid)
 {
 //    std::cout<<"IN CPOSITION: name= "<<m_name<<std::endl;
 }

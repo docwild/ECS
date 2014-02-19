@@ -9,7 +9,7 @@
 //}
 
 
-std::unique_ptr<ECS::System> systemFactory::operator()(ECS::ecsint type, std::string name)
+std::unique_ptr<ECS::System> systemFactory::operator()(ECS::ecsint type, std::string name,ECS::ecsint eid)
 {
     switch(type)
     {
@@ -18,7 +18,7 @@ std::unique_ptr<ECS::System> systemFactory::operator()(ECS::ecsint type, std::st
 //    case SINPUT:
 //        return std::unique_ptr<ECS::System>(new ECS::SInput(name));
     case SMOVEMENT:
-        return std::unique_ptr<ECS::System>(new ECS::SMovement(name));
+        return std::unique_ptr<ECS::System>(new ECS::SMovement(name,eid));
     default:
         return nullptr;
     }
