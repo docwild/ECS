@@ -7,16 +7,16 @@ namespace ECS
 class CSpeed : public Component
 {
 public:
-    explicit CSpeed(std::string name,ECS::ecsint eid);
-    float getX() const;
-    void setX(float value);
+    explicit CSpeed(const std::string &name,ECS::ecsint eid);
+    const float getX() const;
+    void setX(const float value);
 
-    float getY() const;
-    void setY(float value);
+    const float getY() const;
+    void setY(const float value);
     ~CSpeed(){/*std::cout <<" pos destructor"<<std::endl;*/};
 private:
-    float x;
-    float y;
+    float x{0};
+    float y{0};
 };
 }
 #endif // CSPEED_H

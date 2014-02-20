@@ -16,7 +16,7 @@ enum SENUM:ECS::ecsint
 class systemFactory
 {
 public:
-    std::unique_ptr<ECS::System> operator() (ECS::ecsint type,std::string name,ECS::ecsint eid);
+    std::unique_ptr<ECS::System> operator() (const ECS::ecsint type,const std::string &name,const ECS::ecsint eid) const;
 };
 
 #endif // SYSTEMFACTORY_H

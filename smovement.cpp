@@ -3,7 +3,7 @@
 #include "cposition.h"
 #include <cassert>
 using namespace ECS;
-SMovement::SMovement(std::string name, ecsint eid):System(name,eid)
+SMovement::SMovement(const std::string &name, ecsint eid):System(name,eid),m_cSpeed(),m_cPosition()
 {
 }
 
@@ -48,8 +48,8 @@ bool SMovement::detachComponent(ecsint cid)
 {
     if(!System::detachComponent(cid))
         return false;
-    bool speed;
-    bool pos;
+    bool speed = false;
+    bool pos = false;
     auto it = m_compMap.cbegin();
     for(;it!= m_compMap.cend();++it)
     {
@@ -69,3 +69,4 @@ bool SMovement::detachComponent(ecsint cid)
         m_cSpeed = nullptr;
     return true;
 }
+

@@ -9,7 +9,7 @@ namespace ECS
 class System
 {
 public:
-    explicit System(std::string name,ECS::ecsint eid);
+    explicit System(const std::string &name,ECS::ecsint eid);
     System(System const&) = delete; //no copying
     System& operator=(System const&) = delete; //no copying
     virtual ~System(){};
@@ -21,13 +21,13 @@ public:
 
     std::unordered_map<ecsint, Component *> compMap() const;
 
-    ECS::ecsint entityId() const;
+    const ECS::ecsint entityId() const;
 
 protected:
-    std::string m_name;
+    std::string m_name{};
     unsigned int delay{0};
-    std::unordered_map<ECS::ecsint, Component*> m_compMap;
-    ECS::ecsint m_entityId;
+    std::unordered_map<ECS::ecsint, Component*> m_compMap{};
+    ECS::ecsint m_entityId{};
 };
 }
 #endif // SYSTEM_H

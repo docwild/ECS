@@ -11,12 +11,13 @@
 
 #include <unistd.h>
 #include <functional>
-
+#include <typeinfo>
+#include <cxxabi.h>
 using namespace ECS;
 
 int main()
 {
-    const ECS::ecsint MAX = 50;
+    const ECS::ecsint MAX = 5;
     compFactory m_compFact;
 
     systemFactory m_sysFact;
@@ -31,13 +32,15 @@ int main()
         return(100);
 
 
-    ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
+    const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
                                         CENUM::CPOSITION|CENUM::CSPEED,
                                         m_compFact,m_sysFact);
-    ECS::ecsint nonplay = sysman.addEntity(SENUM::SMOVEMENT,
+    const ECS::ecsint nonplay = sysman.addEntity(SENUM::SMOVEMENT,
                                            CENUM::CPOSITION,
                                            m_compFact,m_sysFact);
 
+    if(play == MAX || nonplay == MAX)
+        return MAX;
 
     ECS::System *smo = sysman.getSystem(play,SENUM::SMOVEMENT);
     assert(smo);
@@ -55,8 +58,10 @@ int main()
     {
         return(101);
     }
+    dynamic_cast<ECS::SMovement*>(smo)->getPositionComponent()->setX(50);
+    dynamic_cast<ECS::SMovement*>(smo2)->getPositionComponent()->setX(500);
 
-    //show attachments
+                //show attachments
     std::unordered_map<ecsint,Component*> req;// = smo->compMap();
     for(auto i: std::vector<System*>{smo,smo2})
     {
@@ -79,7 +84,7 @@ int main()
         while (x++ < 5)
         {
             sysman.update();
-            sleep(1);
+//            sleep(1);
         }
 
         ok &= vfunc[i%2](smo,CENUM::CSPEED);

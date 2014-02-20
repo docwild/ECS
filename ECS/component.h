@@ -9,7 +9,7 @@ namespace ECS
 class Component
 {
 public:
-    explicit Component(std::string name,ECS::ecsint eid);
+    explicit Component(const std::string &name,ECS::ecsint eid);
     Component(Component const&) = delete; //no copying
     Component& operator=(Component const&) = delete; //no copying
 //    virtual void poly(){};//enable polymorphism for pointer downcasting
@@ -18,7 +18,7 @@ public:
     void setName(const std::string &name);
 
 protected:
-    std::string m_name;
+    std::string m_name{};
 
 };
 }

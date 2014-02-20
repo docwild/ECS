@@ -38,40 +38,96 @@ public:
     typedef std::unordered_map<ecsint,sysMapUP> sysMap;
     explicit SystemManager(const ECS::ecsint MAX);
     ~SystemManager();
-    unsigned int addEntity(const ecsint &systems,const ecsint &component, compFactoryFunction cf, sysFactoryFunction sf);
-    template<class T1,class T2,class T3,class T4>
-    void  addToMap(const ecsint &bits, const ecsint &index, T1 &mapType, T2 factory,T3 &map, T4 mapVec)
+    const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component, const compFactoryFunction &cf, const sysFactoryFunction &sf);
+
+
+    template<class T1,class T2,class T3>
+    /**
+     * @brief
+     *  Add factory generated system or component to the relevant map.
+     * @param bits
+     *  Logical ORed list of components/systems
+     * @param index
+     *  Entity ID
+     * @param mapType
+     *  The proper typedef for the maptype
+     * @param factory
+     *  The factory funcion
+     * @param map
+     *  The map
+     */
+    bool  addToMap(const ecsint &bits, const ecsint &index, const T1 &mapType, const T2 &factory,T3 &map)
     {
+        bool success = false;
         for (const auto &st: mapType)
         {
 
             if((st.first & bits) == st.first)
             {
-                mapVec[st.first] = factory(st.first,st.second,index);
+//                mapUp[st.first] = factory(st.first,st.second,index);
+                if(map[index][st.first] = factory(st.first,st.second,index))
+                    success = true;
             }
         }
-        map[index] = std::move(mapVec);
+//        map[index] = std::move(mapUp);
+        return success;
     }
-    void removeComponent(const ecsint &component,const ecsint &index);
-    void removeComponentVector(const ecsint &index, const ecsint &component);
+
     void update();
-    bool attachComponent(System *sys, ecsint cid);
-    bool detachComponent(System *sys, ecsint cid);
+
+
+    /**
+     * @brief
+     *  Attaches a registered component to a system
+     * @param sys
+     *  The system object
+     * @param cid
+     *  The component ID
+     * @return bool
+     *  Returns false on failure
+     */
+    bool attachComponent(System *sys, const ecsint cid);
+
+    /**
+     * @brief
+     *  Detaches an already attached component from a system
+     * @param sys
+     *  The system object
+     * @param cid
+     *  The component ID
+     * @return bool
+     *  False if there is no attached component by this ID
+     */
+    bool detachComponent(System *sys, const ecsint cid);
+
+
     template<class T1>
-    bool registerType(ECS::ecsint eid, std::string sid, T1 &map)
+    /**
+     * @brief
+     *  Registers a type, component or system
+     * @param id
+     *  The ID of component/system
+     * @param descriptive
+     *  A descriptive name for the component/system
+     * @param map
+     *  The map to operate on
+     * @return bool
+     *  False on failure
+     */
+    bool registerType(const ECS::ecsint id, const std::string &descriptive, T1 &map)
     {
 
-        const auto it = map.find(eid);
+        const auto it = map.find(id);
         if(it == map.end())
         {
-            map[eid] = sid;
+            map[id] = descriptive;
             return true;
         }
         return false;
     }
 
-    Component *getComponent(ecsint eid, ecsint cid);
-    System *getSystem(ecsint eid, ecsint id);
+    Component *getComponent(const ecsint eid, const ecsint cid);
+    System *getSystem(const ecsint eid, const ecsint id);
     const sysMap &systemMap() const;
     sysMap &systemMap();
 
@@ -87,7 +143,7 @@ public:
 private:
     registerMap m_compTypes;
     registerMap m_sysTypes;
-    std::unique_ptr<Entities>m_entities;
+    std::unique_ptr<Entities>m_entities{};
 
     compMap m_componentMap;
     sysMap m_systemMap;

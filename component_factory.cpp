@@ -1,7 +1,7 @@
 #include "component_factory.h"
 #include "cposition.h"
 #include "cspeed.h"
-std::unique_ptr<ECS::Component> compFactory::operator() (ECS::ecsint type,std::string name,ECS::ecsint eid)
+std::unique_ptr<ECS::Component> compFactory::operator() (const ECS::ecsint type,const std::string &name,const ECS::ecsint eid) const
 {
     switch(type)
     {

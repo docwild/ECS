@@ -1,10 +1,10 @@
 #include "system.h"
 using namespace ECS;
-System::System(std::string name, ecsint eid):m_name(name),m_entityId(eid)
+System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid)
 {
 }
 
-bool System::attachComponent(ecsint cid, Component *comp)
+bool System::attachComponent(ecsint cid,  Component *comp)
 {
     auto it = m_compMap.find(cid);
     if(it == m_compMap.end())
@@ -41,7 +41,7 @@ std::unordered_map<ecsint, Component *> System::compMap() const
 {
     return m_compMap;
 }
-ECS::ecsint System::entityId() const
+const ecsint System::entityId() const
 {
     return m_entityId;
 }

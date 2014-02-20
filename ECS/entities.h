@@ -24,7 +24,7 @@ public:
     const bool hasComponents(const ecsint &index,const ecsint &components) const;
 private:
     const ecsint MAX;
-    std::vector<ecsint> m_components;
+    std::vector<ecsint> m_components{};
 };
 }
 #endif // ENTITIES_H
