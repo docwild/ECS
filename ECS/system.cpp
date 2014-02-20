@@ -2,6 +2,7 @@
 using namespace ECS;
 System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid)
 {
+    std::cout<<"constructing system"<<std::endl;
 }
 
 bool System::attachComponent(ecsint cid,  Component *comp)
@@ -28,7 +29,7 @@ bool System::detachComponent(ecsint cid)
 
 
 }
-std::string System::name() const
+const std::string &System::name() const
 {
     return m_name;
 }
@@ -37,7 +38,7 @@ void System::setName(const std::string &name)
 {
     m_name = name;
 }
-std::unordered_map<ecsint, Component *> System::compMap() const
+const std::unordered_map<ecsint, Component *> &System::compMap() const
 {
     return m_compMap;
 }

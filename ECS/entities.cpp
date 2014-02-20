@@ -37,7 +37,7 @@ const bool Entities::hasComponents(const ecsint &index) const
     return m_components[index]!=0;
 }
 
-ecsint Entities::addEntity(const ecsint &comp)
+const ecsint Entities::addEntity(const ecsint comp)
 {
     ecsint index = 0;
     for(index=1;index<MAX;index++)
@@ -51,6 +51,16 @@ ecsint Entities::addEntity(const ecsint &comp)
 
     return MAX;
 
+}
+
+const bool Entities::removeEntity(const ecsint id)
+{
+    if (id < m_components.size())
+    {
+        m_components[id] = 0;
+        return true;
+    }
+    return false;
 }
 
 

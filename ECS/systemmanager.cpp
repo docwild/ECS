@@ -6,7 +6,7 @@ using namespace ECS;
 
 SystemManager::SystemManager(const ecsint MAX):MAX(MAX),m_componentMap(),m_systemMap(),m_compTypes(),m_sysTypes()
 {
-m_entities.reset( new Entities(MAX));
+    m_entities.reset( new Entities(MAX));
 }
 
 SystemManager::~SystemManager()
@@ -75,23 +75,40 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     return MAX;
 }
 
-void SystemManager::update()
+void SystemManager::update(const double delay)
 {
     for(auto &sys: m_systemMap)
     {
-        std::cout<<"update "<<sys.first<<std::endl;
+
+//        std::cout<<"update "<<sys.first<<std::endl;
         for(auto &sys2:sys.second)
         {
-            std::cout<<"system "<<sys2.first<<std::endl;
 
+            if(sys2.second->m_delayCounter < sys2.second->m_delay && sys2.second->m_delay != 0)
+            {
+                sys2.second->m_delayCounter += delay;
+                continue;
+            }
+
+//            if(sys.first == 1)
+//            {
+//                std::cout<<std::endl<<std::endl;
+//                std::cout<<"delaycout "<<sys2.second->m_delayCounter<<std::endl;
+//                std::cout<<"delay "<<sys2.second->m_delay<<std::endl;
+//                //                std::cout<<"updating 1"<<std::endl;
+//            }
+            //            std::cout<<"system "<<sys2.first<<std::endl;
+            sys2.second->m_delayCounter = 0;
             sys2.second->update();
         }
+
     }
 }
 
 bool SystemManager::attachComponent(System *sys, const ecsint cid)
 {
     Component *c = getComponent(sys->entityId(),cid);
+    assert(c);
     if(!c)
         return false;
     return sys->attachComponent(cid,c);
@@ -99,6 +116,7 @@ bool SystemManager::attachComponent(System *sys, const ecsint cid)
 
 bool SystemManager::detachComponent(System *sys, const ecsint cid)
 {
+//    std::cout <<"detached "<<cid<<std::endl;
     return sys->detachComponent(cid);
 }
 
@@ -111,5 +129,6 @@ System *SystemManager::getSystem(const ecsint eid, const ecsint id)
 {
     return m_systemMap[eid][id].get();
 }
+
 
 

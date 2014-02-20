@@ -9,16 +9,21 @@ namespace ECS
 class Component
 {
 public:
-    explicit Component(const std::string &name,ECS::ecsint eid);
+    friend class SystemManager;
+    Component() = delete;
     Component(Component const&) = delete; //no copying
     Component& operator=(Component const&) = delete; //no copying
 //    virtual void poly(){};//enable polymorphism for pointer downcasting
-    virtual ~Component(){/*std::cout <<" comp destructor"<<std::endl;*/};
+    virtual ~Component(){std::cout <<" comp destructor"<<std::endl;}
     std::string name() const;
-    void setName(const std::string &name);
+
+
 
 protected:
     std::string m_name{};
+    explicit Component(const std::string &name,ECS::ecsint eid);
+private:
+    void setName(const std::string &name);
 
 };
 }

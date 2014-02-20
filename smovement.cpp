@@ -10,19 +10,24 @@ SMovement::SMovement(const std::string &name, ecsint eid):System(name,eid),m_cSp
 void SMovement::update()
 {
     assert(m_cPosition);
-    std::cout<<"Entity: "<<m_entityId<<std::endl;
-    std::cout <<m_cPosition->name()<<" X: "<<m_cPosition->getX()<<std::endl;
-
+//    std::cout<<"Entity: "<<m_entityId<<std::endl;
+//    std::cout <<m_cPosition->name()<<" X: "<<m_cPosition->getX()<<std::endl;
+    if(m_cPosition->getX() > 500)
+        m_cPosition->setX(0);
 
     if(m_cSpeed)
     {
 
         m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
+
+        m_cSpeed->setX(m_cSpeed->getX()+0.5);
         std::cout << m_cSpeed->name()<<" X: "<<m_cSpeed->getX()<<std::endl;
-        m_cSpeed->setX(m_cSpeed->getX()+1);
+        if(m_cSpeed->getX() > 5)
+            m_cSpeed->setX(5);
 
     }
-    std::cout<<std::endl;
+
+//    std::cout<<std::endl;
 }
 
 bool SMovement::attachComponent(ecsint eid, Component *comp)
@@ -69,4 +74,6 @@ bool SMovement::detachComponent(ecsint cid)
         m_cSpeed = nullptr;
     return true;
 }
+
+
 

@@ -19,6 +19,7 @@
 #include "ECS.h"
 //#include <SFML/Window/Event.hpp>
 //#include <Aurora/Dispatch.hpp>
+//class Entities;
 namespace ECS
 {
 class SystemManager
@@ -36,6 +37,7 @@ class SystemManager
 public:
     typedef std::unordered_map<ecsint,compMapUP> compMap;
     typedef std::unordered_map<ecsint,sysMapUP> sysMap;
+
     explicit SystemManager(const ECS::ecsint MAX);
     ~SystemManager();
     const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component, const compFactoryFunction &cf, const sysFactoryFunction &sf);
@@ -73,7 +75,7 @@ public:
         return success;
     }
 
-    void update();
+    void update(const double delay);
 
 
     /**
