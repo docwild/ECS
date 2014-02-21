@@ -2,7 +2,7 @@
 //#include "ECS/Systems/smovement.h"
 //#include "ECS/Systems/sinput.h"
 //#include "ECS/Systems/sposition.h"
-#include "smovement.h"
+
 //std::unique_ptr<ECS::System> systemFactory::operator()()
 //{
 //    return std::unique_ptr<ECS::System>(new ECS::SMovement());
@@ -22,4 +22,9 @@ std::unique_ptr<ECS::System> systemFactory::operator()(const ECS::ecsint type, c
     default:
         return nullptr;
     }
+}
+
+ECS::SMovement *systemFactory::getMovementSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+{
+    return dynamic_cast<ECS::SMovement*>(sysman.getSystem(eid,SENUM::SMOVEMENT));
 }

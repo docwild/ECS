@@ -4,7 +4,10 @@
 using namespace ECS;
 
 
-SystemManager::SystemManager(const ecsint MAX):MAX(MAX),m_componentMap(),m_systemMap(),m_compTypes(),m_sysTypes()
+
+
+SystemManager::SystemManager(const ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact)
+    :MAX(MAX),m_componentMap(),m_systemMap(),m_compTypes(),m_sysTypes(),m_compFact(compFact),m_sysFact(sysFact)
 {
     m_entities.reset( new Entities(MAX));
 }
@@ -59,7 +62,7 @@ SystemManager::registerMap &SystemManager::sysTypes()
 
 
 
-const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &component, const compFactoryFunction &cf, const sysFactoryFunction &sf)
+const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &component)
 {
     if(component == 0)
         return MAX;
@@ -68,8 +71,8 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
         throw MAX;
     m_entities->setComponents(index,component);
     bool success = true;
-    success &= addToMap(component,index,m_compTypes,cf,m_componentMap);
-    success &= addToMap(systems,index,m_sysTypes,sf,m_systemMap);
+    success &= addToMap(component,index,m_compTypes,m_compFact,m_componentMap);
+    success &= addToMap(systems,index,m_sysTypes,m_sysFact,m_systemMap);
     if(success)
         return index;
     return MAX;

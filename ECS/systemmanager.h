@@ -41,9 +41,9 @@ public:
     typedef std::unordered_map<ecsint,compMapUP> compMap;
     typedef std::unordered_map<ecsint,sysMapUP> sysMap;
 
-    explicit SystemManager(const ECS::ecsint MAX);
+    explicit SystemManager(const ECS::ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact);
     ~SystemManager();
-    const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component, const compFactoryFunction &cf, const sysFactoryFunction &sf);
+    const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component);
 
 
     template<class T1,class T2,class T3>
@@ -152,6 +152,9 @@ private:
 
     compMap m_componentMap;
     sysMap m_systemMap;
+
+    compFactoryFunction m_compFact;
+    sysFactoryFunction m_sysFact;
     const ecsint MAX;
 };
 }

@@ -51,7 +51,7 @@ int main()
     compFactory m_compFact;
 
     systemFactory m_sysFact;
-    SystemManager sysman(MAX);
+    SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
     ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
@@ -63,25 +63,24 @@ int main()
 
 
     const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
-                                              CENUM::CPOSITION|CENUM::CSPEED,
-                                              m_compFact,m_sysFact);
+                                              CENUM::CPOSITION|CENUM::CSPEED);
     const ECS::ecsint nonplay = sysman.addEntity(SENUM::SMOVEMENT,
-                                                 CENUM::CPOSITION,
-                                                 m_compFact,m_sysFact);
+                                                 CENUM::CPOSITION);
     const ECS::ecsint extra = sysman.addEntity(SENUM::SMOVEMENT,
-                                                 CENUM::CPOSITION|CENUM::CSPEED,
-                                                 m_compFact,m_sysFact);
+                                                 CENUM::CPOSITION|CENUM::CSPEED);
 
     if(play == MAX || nonplay == MAX || extra == MAX)
         return MAX;
 
-    ECS::System *smo = sysman.getSystem(play,SENUM::SMOVEMENT);
+//    ECS::System *smo = sysman.getSystem(play,SENUM::SMOVEMENT);
+//    assert(smo);
+    ECS::SMovement *smo = m_sysFact.getMovementSystem(play,sysman);
     assert(smo);
 
-    ECS::System *smo2 = sysman.getSystem(nonplay,SENUM::SMOVEMENT);
+    ECS::SMovement *smo2 = m_sysFact.getMovementSystem(nonplay,sysman);
     assert(smo2);
 
-    ECS::System *smo3 = sysman.getSystem(extra,SENUM::SMOVEMENT);
+    ECS::SMovement *smo3 = m_sysFact.getMovementSystem(extra,sysman);
     assert(smo3);
 
     ok &= sysman.attachComponent(smo,CENUM::CSPEED);
@@ -96,13 +95,13 @@ int main()
     {
         return(101);
     }
-    dynamic_cast<ECS::SMovement*>(smo)->getPositionComponent()->setX(50);
-    dynamic_cast<ECS::SMovement*>(smo2)->getPositionComponent()->setX(5);
+    smo->getPositionComponent()->setX(50);
+    smo2->getPositionComponent()->setX(5);
 
 
-    dynamic_cast<ECS::SMovement*>(smo2)->setDelay(duration_cast<nanoseconds>(seconds(1)));
-    dynamic_cast<ECS::SMovement*>(smo)->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
-    dynamic_cast<ECS::SMovement*>(smo3)->setDelay(duration_cast<nanoseconds>(milliseconds(1800)));
+    smo2->setDelay(duration_cast<nanoseconds>(seconds(1)));
+    smo->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
+    smo3->setDelay(duration_cast<nanoseconds>(milliseconds(1800)));
 
     typedef std::function<bool (System*,ECS::ecsint)> func;
     auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);

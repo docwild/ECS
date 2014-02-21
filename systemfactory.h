@@ -3,6 +3,8 @@
 #include <memory>
 #include "ECS/system.h"
 #include "ECS/ECS.h"
+#include "smovement.h"
+#include "ECS/systemmanager.h"
 enum SENUM:ECS::ecsint
 {
 
@@ -17,6 +19,7 @@ class systemFactory
 {
 public:
     std::unique_ptr<ECS::System> operator() (const ECS::ecsint type,const std::string &name,const ECS::ecsint eid) const;
+    ECS::SMovement *getMovementSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
 };
 
 #endif // SYSTEMFACTORY_H

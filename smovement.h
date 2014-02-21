@@ -3,6 +3,7 @@
 #include "ECS/system.h"
 #include "cspeed.h"
 #include "cposition.h"
+
 namespace ECS
 {
 class SMovement : public System
