@@ -1,6 +1,6 @@
 #include "system.h"
 using namespace ECS;
-System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid)
+System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid),m_listenFunction(nullptr)
 {
     std::cout<<"constructing system"<<std::endl;
 }
@@ -32,6 +32,11 @@ bool System::detachComponent(ecsint cid)
 const std::string &System::name() const
 {
     return m_name;
+}
+
+void System::addListener(System::listype func)
+{
+    m_listenFunction = func;
 }
 
 void System::setName(const std::string &name)

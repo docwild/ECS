@@ -75,14 +75,14 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     return MAX;
 }
 
-void SystemManager::update(const double time_span)
+void SystemManager::update(const std::chrono::duration<double, std::nano> &time_span)
 {
     for(auto &sys: m_systemMap)
     {
 
         for(auto &sys2:sys.second)
         {
-            if(sys2.second->m_delay != 0)
+            if(sys2.second->m_delay != std::chrono::seconds(0))
             {
                 if(sys2.second->m_delayCounter < sys2.second->m_delay )
                 {
@@ -90,10 +90,10 @@ void SystemManager::update(const double time_span)
                     sys2.second->m_delayCounter += time_span;
                     continue;
                 }
-                std::cout<<"delay:"<<time_span<<std::endl;
-                std::cout<<"delaycout "<<sys2.second->m_delayCounter<<std::endl;
-                std::cout<<"mdelay "<<sys2.second->m_delay<<std::endl<<std::endl;
-                sys2.second->m_delayCounter = 0;
+//                std::cout<<"delay:"<<time_span.count()<<std::endl;
+//                std::cout<<"delaycout "<<sys2.second->m_delayCounter.count()<<std::endl;
+//                std::cout<<"mdelay "<<sys2.second->m_delay.count()<<std::endl<<std::endl;
+                sys2.second->m_delayCounter = std::chrono::seconds(0);
             }
 
             sys2.second->update();

@@ -12,7 +12,7 @@ public:
     void update();
     bool attachComponent(ecsint eid,  Component * comp) override;
     bool detachComponent(ecsint cid) override;
-    inline void setDelay(const double delay){m_delay = delay;}
+    inline void setDelay(const std::chrono::duration<double, std::nano> delay){m_delay = delay;std::cout<<"Delay set: "<<delay.count()<<std::endl;}
 
     ECS::CPosition *getPositionComponent()const{return m_cPosition;}
 

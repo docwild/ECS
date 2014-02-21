@@ -30,12 +30,14 @@ class SystemManager
     typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint,std::string,ECS::ecsint)> compFactoryFunction;
     typedef std::function<std::unique_ptr<ECS::System> (ECS::ecsint,std::string,ECS::ecsint)> sysFactoryFunction;
 
+
     typedef std::unique_ptr<Component> compUp;
     typedef std::unique_ptr<System> sysUp;
 
     typedef std::unordered_map<ecsint,compUp> compMapUP;
     typedef std::unordered_map<ecsint,sysUp> sysMapUP;
 public:
+
     typedef std::unordered_map<ecsint,compMapUP> compMap;
     typedef std::unordered_map<ecsint,sysMapUP> sysMap;
 
@@ -76,7 +78,7 @@ public:
         return success;
     }
 
-    void update(const double time_span);
+    void update(const std::chrono::duration<double, std::nano> &time_span);
 
 
     /**
