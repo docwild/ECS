@@ -79,9 +79,10 @@ void SystemManager::update(const std::chrono::duration<double, std::nano> &time_
 {
     for(auto &sys: m_systemMap)
     {
-
+        //unordered map indexed by entity id of unordered map of systems indexed by system type id
         for(auto &sys2:sys.second)
         {
+            //unordered map of systems indexed by system type id
             if(sys2.second->m_delay != std::chrono::seconds(0))
             {
                 if(sys2.second->m_delayCounter < sys2.second->m_delay )
