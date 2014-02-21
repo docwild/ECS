@@ -16,7 +16,7 @@ using namespace ECS;
 int main()
 {
     using namespace std::chrono;
-    steady_clock::time_point t_start = steady_clock::now();
+    auto start = high_resolution_clock::now();
     const ECS::ecsint MAX = 5;
     compFactory m_compFact;
 
@@ -60,7 +60,8 @@ int main()
     }
     dynamic_cast<ECS::SMovement*>(smo)->getPositionComponent()->setX(50);
     dynamic_cast<ECS::SMovement*>(smo2)->getPositionComponent()->setX(500);
-    dynamic_cast<ECS::SMovement*>(smo)->setDelay(1000);
+    dynamic_cast<ECS::SMovement*>(smo2)->setDelay(duration_cast<nanoseconds>(milliseconds(500)).count());
+    dynamic_cast<ECS::SMovement*>(smo)->setDelay(duration_cast<nanoseconds>(milliseconds(2000)).count());
 
     //show attachments
     //    std::unordered_map<ecsint,Component*> req;// = smo->compMap();
@@ -77,22 +78,33 @@ int main()
     auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
     auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
     std::vector<func> vfunc{funcptr,funcptr2};
-    time_t timer;
-    double total_time = 0.0f;
-    double loop_time = 0.f;
+
+    //    double total_time = 0.0f;
+    //    duration<double,std::milli> loop_time;
+    //    loop_time.zero();
     unsigned long long i = 0;
 
 
-    steady_clock::time_point t1 = steady_clock::now();
-    while(total_time < 1000*60*5)
+
+    duration<double,std::nano> timetaken;
+    duration<double,std::nano> looptime;
+
+    auto end = high_resolution_clock::now();
+    timetaken = end - start;
+    auto loopstart = end;
+    while(timetaken < std::chrono::seconds(10))
     {
+
+
 
         int x = 0;
 
-        while (x++ < 3)
+        while (x++ < 5)
         {
-            sysman.update(loop_time);
-            //            sleep(1);
+            looptime = duration_cast<nanoseconds>(end - loopstart);
+            loopstart = end;
+            sysman.update(looptime.count());
+            end = high_resolution_clock::now();
         }
 
         ok &= vfunc[i%2](smo,CENUM::CSPEED);
@@ -101,20 +113,16 @@ int main()
             std::cout<<"Could not attach/detach"<<std::endl;
             break;
         }
-        steady_clock::time_point t2 = steady_clock::now();
 
-        duration<double,std::milli> time_span = duration_cast<duration<double,std::milli>>(t2 - t1);
 
-        loop_time = time_span.count();
-        total_time += time_span.count();
-        t1 = t2;
+
+
+        end = high_resolution_clock::now();
+        timetaken = end - start;
         i++;
-//        std::cout <<"Time: " << total_time <<std::endl;
     }
     std::cout<<"I="<<i<<std::endl;
-    steady_clock::time_point t_end = steady_clock::now();
-    duration<double> time_span = duration_cast<duration<double>>(t_end - t_start);
-    std::cout<<"Time::"<<time_span.count()<<std::endl;
+    std::cout<<"Time::"<<duration_cast<seconds>(timetaken).count()<<std::endl;
     return 0;
 }
 

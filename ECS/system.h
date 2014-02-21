@@ -23,7 +23,7 @@ protected:
     virtual bool attachComponent(ecsint cid, Component *comp);
     virtual bool detachComponent(ecsint cid);
     virtual void update()=0;
-    virtual void setDelay(const ecsint delay)=0;
+    virtual void setDelay(const double delay)=0;
     explicit System(const std::string &name,ECS::ecsint eid);
     const ECS::ecsint entityId() const;
     const std::unordered_map<ecsint, Component *> &compMap() const;

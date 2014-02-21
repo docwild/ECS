@@ -17,6 +17,7 @@
 //#include "Systems/sinput.h"
 //#include "Systems/sscenegraph.h"
 #include "ECS.h"
+#include <chrono>
 //#include <SFML/Window/Event.hpp>
 //#include <Aurora/Dispatch.hpp>
 //class Entities;
@@ -75,7 +76,7 @@ public:
         return success;
     }
 
-    void update(const double delay);
+    void update(const double time_span);
 
 
     /**
