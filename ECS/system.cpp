@@ -1,6 +1,6 @@
 #include "system.h"
 using namespace ECS;
-System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid),m_listenFunction(nullptr)
+System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid)
 {
     std::cout<<"constructing system"<<std::endl;
 }

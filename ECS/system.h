@@ -35,7 +35,8 @@ protected:
     std::chrono::duration<double, std::milli> m_delayCounter{std::chrono::milliseconds(0)};
     std::unordered_map<ECS::ecsint, Component*> m_compMap{};
     ECS::ecsint m_entityId{};
-    listype m_listenFunction;
+    listype m_listenFunction{nullptr};
+    bool m_update{true};
 private:
 
     void setName(const std::string &name);

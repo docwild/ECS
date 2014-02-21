@@ -8,58 +8,40 @@
 #include "smovement.h"
 
 #include <functional>
-#include <ctime>
 #include <chrono>
-#include "ECS/listener.h"
+
 
 using namespace ECS;
-class MyListener:public Listener
+
+class MyListener
 {
 public:
-    MyListener():Listener()
+    MyListener()
     {
 
+    }
+    System::listype operator()(int number)
+    {
+        m_number = number;
+        return std::bind(&MyListener::listen, this);
+    }
+    System::listype operator()(std::string message)
+    {
+        m_listenMessage = message;
+        return std::bind(&MyListener::listen2, this);
     }
     void listen()
     {
-        std::cout<<"listening 1"<<std::endl<<m_listenMessage<<std::endl;
+        std::cout<<"listening 1"<<std::endl<<m_number<<std::endl;
     }
-    std::string listenMessage() const
+    void listen2()
     {
-    return m_listenMessage;
-    }
-
-    void setListenMessage(const std::string &listenMessage)
-    {
-    m_listenMessage = listenMessage;
+        std::cout<<"listening 2"<<std::endl<<m_listenMessage<<std::endl;
     }
 
 private:
+    int m_number{0};
     std::string m_listenMessage;
-};
-class MyListener2:public Listener
-{
-public:
-    MyListener2():Listener()
-    {
-
-    }
-    void listen()
-    {
-        std::cout<<"listening 2"<<std::endl<<m_number<<std::endl;
-    }
-    int number() const
-    {
-    return m_number;
-    }
-
-    void setNumber(const int &listenMessage)
-    {
-    m_number = listenMessage;
-    }
-
-private:
-    int m_number;
 };
 int main()
 {
@@ -104,7 +86,6 @@ int main()
 
     ok &= sysman.attachComponent(smo,CENUM::CSPEED);
     ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
-    //    ok &= sysman.attachComponent(smo,CENUM::CACTIONS);
 
     ok &= sysman.attachComponent(smo2,CENUM::CPOSITION);
 
@@ -120,20 +101,9 @@ int main()
 
 
     dynamic_cast<ECS::SMovement*>(smo2)->setDelay(duration_cast<nanoseconds>(seconds(1)));
-    dynamic_cast<ECS::SMovement*>(smo)->setDelay(duration_cast<nanoseconds>(milliseconds(200)));
-    dynamic_cast<ECS::SMovement*>(smo3)->setDelay(duration_cast<nanoseconds>(milliseconds(800)));
+    dynamic_cast<ECS::SMovement*>(smo)->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
+    dynamic_cast<ECS::SMovement*>(smo3)->setDelay(duration_cast<nanoseconds>(milliseconds(1800)));
 
-    //show attachments
-    //    std::unordered_map<ecsint,Component*> req;// = smo->compMap();
-    //    for(const auto i: std::vector<System*>{smo,smo2})
-    //    {
-    //        req = i->compMap();
-    //        std::cout <<i->name()<<" System attachments for entity: "<<i->entityId()<<std::endl;
-    //        for(const auto c: req)
-    //        {
-    //            std::cout<<"Attachment: "<<c.second->name()<<std::endl;
-    //        }
-    //    }
     typedef std::function<bool (System*,ECS::ecsint)> func;
     auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
     auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
@@ -141,19 +111,12 @@ int main()
 
 
     MyListener lis;
-    MyListener2 lis2;
-    lis.setListenMessage("THIS IS MY MESSAGE");
-    lis2.setNumber(55);
-//    typedef std::function<void()> listype;
-//    System::listype lisfunc;
-    auto lisptr = std::bind(&Listener::listen, &lis);
-    auto lisptr2 = std::bind(&Listener::listen, &lis2);
-    smo->addListener(lisptr);
-    smo2->addListener(lisptr2);
+    MyListener lis2;
+
+    smo->addListener(lis("THIS IS MY MESSAGE"));
+    smo2->addListener(lis2(61));
     smo3->addListener([]{std::cout<<"lambda listener"<<std::endl;});
-    //    double total_time = 0.0f;
-    //    duration<double,std::milli> loop_time;
-    //    loop_time.zero();
+
     unsigned long long i = 0;
 
 
@@ -168,7 +131,7 @@ int main()
     auto loopstart = end;
     auto timer = end;
     auto timerfuture = high_resolution_clock::now() + seconds(1);
-    while(/*timetaken < std::chrono::seconds(5)*/i < 100000)
+    while(/*timetaken < std::chrono::seconds(5)*/i < 1000000)
     {
 
 
@@ -196,11 +159,6 @@ int main()
         end = high_resolution_clock::now();
         timetaken = end - start;
         i++;
-//        if(high_resolution_clock::now() > timerfuture)
-//        {
-//            std::cerr<<"Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<std::endl;
-//            timerfuture = high_resolution_clock::now() + seconds(1);
-//        }
     }
     std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
     std::flush(std::cerr);
