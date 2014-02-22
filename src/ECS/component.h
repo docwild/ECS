@@ -14,7 +14,7 @@ public:
     Component(Component const&) = delete; //no copying
     Component& operator=(Component const&) = delete; //no copying
 //    virtual void poly(){};//enable polymorphism for pointer downcasting
-    virtual ~Component(){std::cout <<" comp destructor"<<std::endl;}
+    virtual ~Component(){/*std::cout <<" comp destructor"<<std::endl;*/}
     std::string name() const;
 
 

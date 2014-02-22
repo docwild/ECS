@@ -1,6 +1,6 @@
 #ifndef SMOVEMENT_H
 #define SMOVEMENT_H
-#include "ECS/system.h"
+#include "../ECS/system.h"
 #include "cspeed.h"
 #include "cposition.h"
 

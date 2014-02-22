@@ -2,7 +2,7 @@
 using namespace ECS;
 System::System(const std::string &name, ecsint eid):m_name(name),m_entityId(eid)
 {
-    std::cout<<"constructing system"<<std::endl;
+//    std::cout<<"constructing system"<<std::endl;
 }
 
 bool System::attachComponent(ecsint cid,  Component *comp)

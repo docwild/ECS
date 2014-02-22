@@ -2,8 +2,8 @@
 #define COMPONENT_FACTORY_H
 #include <string>
 #include <memory>
-#include "ECS/ECS.h"
-#include "ECS/component.h"
+#include "../ECS/ECS.h"
+#include "../ECS/component.h"
 //#include "ECS/Components/cactions.h"
 //#include "ECS/Components/cbounds.h"
 //#include "ECS/Components/cinput.h"
@@ -20,7 +20,7 @@ enum CENUM:ECS::ecsint
     CBOUNDS = 1 << 5
 
 };
-class compFactory
+class CompFactory
 {
 public:
     std::unique_ptr<ECS::Component> operator() (const ECS::ecsint type,const std::string &name,const ECS::ecsint eid) const;

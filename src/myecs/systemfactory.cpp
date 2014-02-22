@@ -9,7 +9,7 @@
 //}
 
 
-std::unique_ptr<ECS::System> systemFactory::operator()(const ECS::ecsint type, const std::string &name,const ECS::ecsint eid) const
+std::unique_ptr<ECS::System> SystemFactory::operator()(const ECS::ecsint type, const std::string &name,const ECS::ecsint eid) const
 {
     switch(type)
     {
@@ -24,7 +24,7 @@ std::unique_ptr<ECS::System> systemFactory::operator()(const ECS::ecsint type, c
     }
 }
 
-ECS::SMovement *systemFactory::getMovementSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+ECS::SMovement *SystemFactory::getMovementSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
 {
     return dynamic_cast<ECS::SMovement*>(sysman.getSystem(eid,SENUM::SMOVEMENT));
 }

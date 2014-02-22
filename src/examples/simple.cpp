@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cassert>
-#include "ECS/ECS.h"
-#include "ECS/systemmanager.h"
+#include "../ECS/ECS.h"
+#include "../ECS/systemmanager.h"
 
-#include "component_factory.h"
-#include "systemfactory.h"
-#include "smovement.h"
+#include "../myecs/component_factory.h"
+#include "../myecs/systemfactory.h"
+#include "../myecs/smovement.h"
 
 #include <functional>
 #include <chrono>
@@ -48,9 +48,9 @@ int main()
     using namespace std::chrono;
     auto start = high_resolution_clock::now();
     const ECS::ecsint MAX = 5;
-    compFactory m_compFact;
+    CompFactory m_compFact;
 
-    systemFactory m_sysFact;
+    SystemFactory m_sysFact;
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
@@ -72,8 +72,7 @@ int main()
     if(play == MAX || nonplay == MAX || extra == MAX)
         return MAX;
 
-//    ECS::System *smo = sysman.getSystem(play,SENUM::SMOVEMENT);
-//    assert(smo);
+
     ECS::SMovement *smo = m_sysFact.getMovementSystem(play,sysman);
     assert(smo);
 
@@ -96,7 +95,7 @@ int main()
         return(101);
     }
     smo->getPositionComponent()->setX(50);
-    smo2->getPositionComponent()->setX(5);
+    smo2->getPositionComponent()->setX(15);
 
 
     smo2->setDelay(duration_cast<nanoseconds>(seconds(1)));

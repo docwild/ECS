@@ -12,7 +12,9 @@ class System
 {
 public:
     friend class SystemManager;
-
+#ifdef UNITTEST
+//    friend class MockSystem;
+#endif
     typedef std::function<void()> listype;
     System() = delete;//no default
     System(System const&) = delete; //no copying
@@ -20,16 +22,18 @@ public:
     virtual ~System(){}
     inline const std::string &name() const;
     virtual void addListener(listype func);
-
-protected:
     virtual bool attachComponent(ecsint cid, Component *comp);
     virtual bool detachComponent(ecsint cid);
     virtual void update()=0;
     virtual void setDelay( const std::chrono::duration<double, std::nano> delay)=0;
-
-    explicit System(const std::string &name,ECS::ecsint eid);
     const ECS::ecsint entityId() const;
     const std::unordered_map<ecsint, Component *> &compMap() const;
+protected:
+
+
+    explicit System(const std::string &name,ECS::ecsint eid);
+
+
     std::string m_name{};
     std::chrono::duration<double, std::milli> m_delay{std::chrono::milliseconds(0)};
     std::chrono::duration<double, std::milli> m_delayCounter{std::chrono::milliseconds(0)};

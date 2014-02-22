@@ -68,7 +68,7 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
         return MAX;
     ecsint index = m_entities->addEntity(component);
     if(index == MAX)
-        throw MAX;
+        throw std::exception();
     m_entities->setComponents(index,component);
     bool success = true;
     success &= addToMap(component,index,m_compTypes,m_compFact,m_componentMap);
@@ -107,6 +107,11 @@ void SystemManager::update(const std::chrono::duration<double, std::nano> &time_
         }
 
     }
+}
+
+void SystemManager::setSystemUpdate(bool update,ECS::ecsint sysid,ECS::ecsint eid)
+{
+    getSystem(eid,sysid)->m_update = update;
 }
 
 bool SystemManager::attachComponent(System *sys, const ecsint cid)

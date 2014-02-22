@@ -70,7 +70,7 @@ public:
             if((st.first & bits) == st.first)
             {
 //                mapUp[st.first] = factory(st.first,st.second,index);
-                if(map[index][st.first] = factory(st.first,st.second,index))
+                if((map[index][st.first] = factory(st.first,st.second,index)))
                     success = true;
             }
         }
@@ -79,7 +79,7 @@ public:
     }
 
     void update(const std::chrono::duration<double, std::nano> &time_span);
-
+    void setSystemUpdate(bool update, ecsint sysid, ecsint eid);
 
     /**
      * @brief

@@ -10,11 +10,12 @@ SMovement::SMovement(const std::string &name, ecsint eid):System(name,eid),m_cSp
 void SMovement::update()
 {
     assert(m_cPosition);
-    std::cout<<"Entity: "<<m_entityId<<std::endl;
+
 
     if(m_listenFunction)
         m_listenFunction();
-
+    ecsint id = m_entityId;
+    std::cout<<"Entity: "<<m_entityId<<std::endl;
     if(m_cSpeed)
     {
         if(m_cPosition->getX() < 500)
