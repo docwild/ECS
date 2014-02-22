@@ -18,7 +18,7 @@ int main()
     using namespace std::chrono;
     auto start = high_resolution_clock::now();
 
-    const ECS::ecsint MAX = 5;
+    const ECS::ecsint MAX = 500;
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
@@ -26,35 +26,30 @@ int main()
     bool ok = true;
 
     ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+    ok &= sysman.registerType(CENUM::CSPEED,"Position",sysman.compTypes());
     ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
         return(100);
-
-
-    const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
-                                              CENUM::CPOSITION);
-
-    if(play == MAX)
-        return MAX;
-
-
-    ECS::SMovement *smo = m_sysFact.getMovementSystem(play,sysman);
-    assert(smo);
-
-
-    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
-
-
-    if(!ok)
+    ECS::ecsint ie=0;
+    while( true )
     {
-        return(101);
+        if(ie == MAX -1)
+            break;
+        ie  = sysman.addEntity(SENUM::SMOVEMENT,
+                                CENUM::CPOSITION|CENUM::CSPEED);
+
+        ECS::SMovement *smo = m_sysFact.getMovementSystem(ie,sysman);
+        assert(smo);
+
+        ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
+        ok &= sysman.attachComponent(smo,CENUM::CSPEED);
+        if(!ok)
+        {
+            return(101);
+        }
+        smo->setDelay(duration_cast<nanoseconds>(milliseconds(10000)));
     }
-    smo->getPositionComponent()->setX(50);
-
-
-    smo->setDelay(duration_cast<nanoseconds>(seconds(5)));
-
 
     unsigned long long i = 0;
 
@@ -62,7 +57,7 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(/*timetaken < std::chrono::seconds(5)*/i < 1000000)
+    while(/*timetaken < std::chrono::seconds(5)*/i < 1000)
     {
 
 
@@ -80,11 +75,10 @@ int main()
 
         i++;
         timetaken = end - start;
+
     }
     std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
+    std::cerr<<"Total entities = "<<sysman.entityCount()<<std::endl;
     std::flush(std::cerr);
-    return 0;
+
 }
-
-
-

@@ -11,24 +11,23 @@ void SMovement::update()
 {
     assert(m_cPosition);
 
-
     if(m_listenFunction)
         m_listenFunction();
     ecsint id = m_entityId;
-    std::cout<<"Entity: "<<m_entityId<<std::endl;
+//    std::cout<<"Entity: "<<m_entityId<<std::endl;
     if(m_cSpeed)
     {
         if(m_cPosition->getX() < 500)
             m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
         if(m_cSpeed->getX() < 5)
             m_cSpeed->setX(m_cSpeed->getX()+0.5);
-        std::cout << m_cSpeed->name()<<" X: "<<m_cSpeed->getX()<<std::endl;
+//        std::cout << m_cSpeed->name()<<" Speed X: "<<m_cSpeed->getX()<<std::endl;
 
         //            m_cSpeed->setX(5);
         //        std::cout<<std::endl;
     }
 
-    std::cout <<m_cPosition->name()<<" X: "<<m_cPosition->getX()<<std::endl<<std::endl;
+//    std::cout <<m_cPosition->name()<<" X: "<<m_cPosition->getX()<<std::endl<<std::endl;
 }
 
 bool SMovement::attachComponent(ecsint eid, Component *comp)

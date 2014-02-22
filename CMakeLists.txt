@@ -18,7 +18,7 @@ set(ITEMS
     src/myecs/smovement.h
 )
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 #aux_source_directory(./ECS ECS_LIST)
 set(ECS_LIST
 ${ECS_LIST}
@@ -36,6 +36,9 @@ ${ECS_LIST}
 set(SIMPLE
     ${SIMPLE}
     ${CMAKE_SOURCE_DIR}/src/examples/simple.cpp
+)
+set(MANY
+    ${CMAKE_SOURCE_DIR}/src/examples/many_entities.cpp
 )
 set(BIGGER
     ${BIGGER}
@@ -74,8 +77,10 @@ if(BUILD_EXAMPLES)
 #add_definitions(-DCTEST)
     add_executable(simple ${SIMPLE})
     add_executable(bigger ${BIGGER})
+    add_executable(manyents ${MANY})
     target_link_libraries(simple ecs myecs)
     target_link_libraries(bigger ecs myecs)
+    target_link_libraries(manyents ecs myecs)
 endif()
 option(BUILD_TESTS "Compile tests" OFF)
 if(BUILD_TESTS)

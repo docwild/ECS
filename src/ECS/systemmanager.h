@@ -130,7 +130,7 @@ public:
         }
         return false;
     }
-
+    ECS::ecsint entityCount();
     Component *getComponent(const ecsint eid, const ecsint cid);
     System *getSystem(const ecsint eid, const ecsint id);
     const sysMap &systemMap() const;

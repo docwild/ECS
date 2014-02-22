@@ -107,6 +107,7 @@ void SystemManager::update(const std::chrono::duration<double, std::nano> &time_
         }
 
     }
+
 }
 
 void SystemManager::setSystemUpdate(bool update,ECS::ecsint sysid,ECS::ecsint eid)
@@ -127,6 +128,11 @@ bool SystemManager::detachComponent(System *sys, const ecsint cid)
 {
     //    std::cout <<"detached "<<cid<<std::endl;
     return sys->detachComponent(cid);
+}
+
+ecsint SystemManager::entityCount()
+{
+    return m_entities->m_components.size();
 }
 
 Component *SystemManager::getComponent(const ecsint eid, const ecsint cid)
