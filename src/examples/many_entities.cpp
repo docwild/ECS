@@ -18,7 +18,7 @@ int main()
     using namespace std::chrono;
     auto start = high_resolution_clock::now();
 
-    const ECS::ecsint MAX = 500;
+    const ECS::ecsint MAX = 5000;
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
@@ -48,7 +48,7 @@ int main()
         {
             return(101);
         }
-        smo->setDelay(duration_cast<nanoseconds>(milliseconds(10000)));
+        smo->setDelay(duration_cast<nanoseconds>(milliseconds(1000)));
     }
 
     unsigned long long i = 0;
