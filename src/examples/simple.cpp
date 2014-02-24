@@ -34,7 +34,7 @@ int main()
 
     const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
                                               CENUM::CPOSITION|CENUM::CSPEED);
-    const ECS::ecsint nonplay = sysman.addEntity();
+    const ECS::ecsint nonplay = sysman.addEntity(SENUM::SMOVEMENT);
 
 
     sysman.attachComponent(CENUM::CPOSITION,nonplay);
@@ -48,10 +48,10 @@ int main()
 
     ECS::SMovement *smo = m_sysFact.getMovementSystem(play,sysman);
     assert(smo);
-
+    smo->build(play);
     ECS::SMovement *smo2 = m_sysFact.getMovementSystem(nonplay,sysman);
-    assert(!smo2);
-
+    assert(smo2);
+    smo2->build(nonplay);
 
 //    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
 
@@ -73,7 +73,7 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(/*timetaken < std::chrono::seconds(5)*/i < 10000)
+    while(timetaken < std::chrono::seconds(15)/*i < 10000*/)
     {
 
 
@@ -94,7 +94,7 @@ int main()
     }
     std::cout << "SMOVEMENT called: "<<SMovement::called<<std::endl;
     std::flush(std::cout);
-    std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
+    std::cerr<<"Total Time::"<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds."<<std::endl<<"Iterations::"<<i<<std::endl;
     std::cerr<<"Total entities = "<<sysman.entityCount()<<std::endl;
     return 0;
 }

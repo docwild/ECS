@@ -10,6 +10,7 @@ SystemManager::SystemManager(const ecsint MAX, const compFactoryFunction &compFa
     :MAX(MAX),m_compFact(compFact),m_sysFact(sysFact)
 {
     m_entities.reset( new Entities(MAX));
+
 }
 
 SystemManager::~SystemManager()
@@ -26,12 +27,11 @@ SystemManager::~SystemManager()
 
 const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &component)
 {
-    if(component == 0)
-        return MAX;
+
     ecsint index = m_entities->addEntity(component);
     if(index > MAX)
         return index;
-    m_entities->setComponents(index,component);
+//    m_entities->setComponents(index,component);
     bool success = true;
     success &= addSystems(systems,index);
     //    registerType(component,index,m_compsMap,m_compFact);
@@ -39,6 +39,7 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
 
     //    success &= addToMap(component,index,m_compTypes,m_compFact,m_componentMap);
     //    success &= addToMap(systems,index,m_sysTypes,m_sysFact,m_systemMap);
+
     if(success)
         return index;
     return MAX+1;
@@ -81,7 +82,7 @@ void SystemManager::setSystemUpdate(bool update,ECS::ecsint sysid,ECS::ecsint ei
 
 bool SystemManager::attachComponent(ecsint cid, ecsint eid)
 {
-    compMapUP *comps;
+    System::compMapUP *comps;
     try
     {
         comps = &m_compsMap.at(eid);
@@ -96,8 +97,7 @@ bool SystemManager::attachComponent(ecsint cid, ecsint eid)
     auto it = comps->find(cid);
     if(it != comps->end() && it->second)
     {
-        //            std::cout<<"Got it"<<std::endl;
-        m_compsAttached.at(eid)[cid] = true;
+        m_entities->setFlags(eid,cid,m_entities->m_components);
         return true;
     }
     return false;
@@ -155,7 +155,7 @@ Component *SystemManager::getComponent(const ecsint eid, const ecsint cid)
 
 System *SystemManager::getSystem(const ecsint eid, const ecsint id)
 {
-    if(m_systemsMap[id]->hasSystem(eid))
+    if(m_entities->hasFlags(eid, m_entities->m_systems))
         return m_systemsMap[id].get();
     return nullptr;
 }

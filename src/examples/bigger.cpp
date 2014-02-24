@@ -101,7 +101,7 @@ int main()
     smo2->setDelay(duration_cast<nanoseconds>(seconds(1)));
     smo->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
 //    smo3->setDelay(duration_cast<nanoseconds>(milliseconds(1800)));
-    sysman.setSystemUpdate(false,SENUM::SMOVEMENT,smo3->entityId());
+    sysman.setSystemUpdate(false,SENUM::SMOVEMENT,extra);
 
     typedef std::function<bool (System*,ECS::ecsint)> func;
 //    auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);

@@ -3,7 +3,7 @@
 #include "cposition.h"
 #include <cassert>
 using namespace ECS;
-int SMovement::called = 0;
+unsigned long long SMovement::called = 0;
 SMovement::SMovement():System("Movement"),m_cSpeedMap(),m_cPositionMap()
 {
 
@@ -12,14 +12,27 @@ SMovement::SMovement():System("Movement"),m_cSpeedMap(),m_cPositionMap()
 void SMovement::update()
 {
     //    assert(m_cPositionMap);
+
     for(auto &m : m_entMap)
     {
         if (!m.second)
             continue;
         if(m_listenFunction)
             m_listenFunction();
-        ecsint id = m_entityId;
+//        ecsint id = m_entityId;
+        try
+        {
+        std::cout<<"SPEED1= "<<m_cSpeedMap.at(m.first)->getX()<<std::endl;
+        m_cSpeedMap.at(m.first)->setX(m_cSpeedMap.at(m.first)->getX()+1);
+        std::cout<<"SPEED2= "<<m_cSpeedMap.at(m.first)->getX()<<std::endl;
+        }
+        catch(std::out_of_range e)
+        {
+            std::cout<<"no speed"<<std::endl;
+        }
+
         called++;
+
     }
     //    std::cout<<"Entity: "<<m_entityId<<std::endl;
     //    if(m_cSpeed)

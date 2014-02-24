@@ -34,11 +34,11 @@ int main()
     ECS::ecsint ie=0;
     while( true )
     {
-        if(ie > MAX)
-            break;
+
         ie  = sysman.addEntity(SENUM::SMOVEMENT,
                                 CENUM::CPOSITION|CENUM::CSPEED);
-
+        if(ie > MAX)
+            break;
         ECS::SMovement *smo = m_sysFact.getMovementSystem(ie,sysman);
         assert(smo);
 
@@ -49,6 +49,7 @@ int main()
             return(101);
         }
         smo->setDelay(duration_cast<nanoseconds>(milliseconds(0)));
+        smo->build(ie);
     }
 
     unsigned long long i = 0;
@@ -57,7 +58,7 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(/*timetaken < std::chrono::seconds(5)*/i < 1000000)
+    while(timetaken < std::chrono::seconds(5)/*i < 10000000*/)
     {
 
 

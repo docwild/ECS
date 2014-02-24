@@ -5,6 +5,7 @@
 #include "../ECS/ECS.h"
 #include "cspeed.h"
 #include "cposition.h"
+#include "component_factory.h"
 #include <memory>
 namespace ECS
 {
@@ -17,13 +18,34 @@ public:
     bool detachComponent(ecsint cid) override;
     inline void setDelay(const std::chrono::duration<double, std::nano> delay){m_delay = delay;/*std::cout<<"Delay set: "<<delay.count()<<std::endl;*/}
     bool addEntity(ecsint eid);
-    static int called;
+    static unsigned long long called;
+    void build(ECS::ecsint eid)
+    {
+        auto &comps = m_compMap->at(eid);
+        try
+        {
+            m_cSpeedMap.emplace(eid,dynamic_cast<ECS::CSpeed*>(comps.at(CENUM::CSPEED).get()));
+        }
+        catch(std::out_of_range e)
+        {
+
+        }
+        try
+        {
+            m_cPositionMap.emplace(eid,dynamic_cast<ECS::CPosition*>(comps.at(CENUM::CPOSITION).get()));
+        }
+        catch(std::out_of_range e)
+        {
+
+        }
+
+    }
 
 private:
-    using SpeedUp = std::unique_ptr<ECS::CSpeed>;
-    using SpeedMap = std::unordered_map<ECS::ecsint,SpeedUp>;
-    using PositionUp = std::unique_ptr<ECS::CPosition>;
-    using PositionMap = std::unordered_map<ECS::ecsint,PositionUp>;
+    using SpeedRp = ECS::CSpeed*;
+    using SpeedMap = std::unordered_map<ECS::ecsint,SpeedRp>;
+    using PositionRp = ECS::CPosition*;
+    using PositionMap = std::unordered_map<ECS::ecsint,PositionRp>;
     SpeedMap m_cSpeedMap;
     PositionMap m_cPositionMap;
     //    ECS::CSpeed *m_cSpeed;

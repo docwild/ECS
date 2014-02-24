@@ -29,25 +29,18 @@ namespace ECS
 class SystemManager
 {
 
-//    typedef std::unordered_map<ECS::ecsint,std::string> registerMap;
+    //    typedef std::unordered_map<ECS::ecsint,std::string> registerMap;
     typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint)> compFactoryFunction;
     typedef std::function<std::unique_ptr<ECS::System> (ECS::ecsint)> sysFactoryFunction;
 
 
-    typedef std::unique_ptr<Component> compUp;
-    typedef std::unique_ptr<System> sysUp;
 
-    typedef std::unordered_map<ecsint,compUp> compMapUP;
-    using MapBool = std::unordered_map<ecsint,bool>;
-    using CompAttached = std::unordered_map<ecsint,MapBool>;
-    typedef std::unordered_map<ecsint,sysUp> sysMapUP;
-    typedef std::unordered_map<ecsint,compMapUP> compMap;
-//    using mapEntSys = std::unordered_map<ecsint,ecsint>;
-//    using typeVec = std::vector<ECS::ecsint>;
+    //    using mapEntSys = std::unordered_map<ecsint,ecsint>;
+    //    using typeVec = std::vector<ECS::ecsint>;
 public:
 
 
-//    typedef std::unordered_map<ecsint,sysMapUP> sysMap;
+    //    typedef std::unordered_map<ecsint,sysMapUP> sysMap;
 
     explicit SystemManager(const ECS::ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact);
     ~SystemManager();
@@ -58,25 +51,25 @@ public:
     void update(const std::chrono::duration<double, std::nano> &time_span);
     void setSystemUpdate(bool update, ecsint sysid, ecsint eid);
     bool attachComponent(ECS::ecsint cid,ECS::ecsint eid);
-//    bool addComponent(ECS::ecsint eid,ECS::ecsint cid)
-//    {
-//        auto it = m_compsMap.find(eid);
-//        if(it == m_compsMap.end())
-//        {
+    //    bool addComponent(ECS::ecsint eid,ECS::ecsint cid)
+    //    {
+    //        auto it = m_compsMap.find(eid);
+    //        if(it == m_compsMap.end())
+    //        {
 
-//        }
-//        auto it2 = m_compsMap.at(eid).find(cid);
-//        if(it2 == m_compsMap.at(eid).end())
-//        {
+    //        }
+    //        auto it2 = m_compsMap.at(eid).find(cid);
+    //        if(it2 == m_compsMap.at(eid).end())
+    //        {
 
-//        }
-//    }
+    //        }
+    //    }
 
     bool hasComponent(ECS::ecsint eid, ECS::ecsint cid)const
     {
         try
         {
-            return m_compsAttached.at(eid).at(cid);
+            return m_entities->hasFlags(eid,cid,m_entities->m_components);
         }
         catch(std::out_of_range e)
         {
@@ -92,8 +85,8 @@ public:
         auto it = m_compsMap.find(eid);
         if(it == m_compsMap.end())
         {
-            m_compsMap.emplace(eid,compMapUP());
-            m_compsAttached.emplace(eid,MapBool());
+            m_compsMap.emplace(eid,System::compMapUP());
+            //            m_compsAttached.emplace(eid,MapBool());
 
         }
         hilow b = bounds(components);
@@ -106,7 +99,7 @@ public:
                 {
                     success &= registerType(m_compsMap.at(eid),m_compFact,i);
 
-//                    m_compsAttached[eid][i] = success;
+                    //                    m_compsAttached[eid][i] = success;
                     success &= attachComponent(i,eid);
                 }
                 catch (std::out_of_range e)
@@ -118,6 +111,23 @@ public:
         }
         return success;
     }
+    void associate()
+    {
+        for(auto &ms : m_systemsMap)
+        {
+            try
+            {
+                associated.at(ms.first);
+            }
+            catch(std::out_of_range e)
+            {
+                ms.second->setCompMap(m_compsMap);
+                associated.emplace(ms.first,true);
+            }
+        }
+
+    }
+
     bool addSystems(ECS::ecsint systems, ECS::ecsint eid)
     {
         if(systems == 0)
@@ -126,13 +136,17 @@ public:
         bool success = true;
         for(ECS::ecsint i = b["low"]; i <= b["high"];)
         {
-            if((i & systems) == i)
+            if((i & systems)==i)
             {
                 success &= registerType(m_systemsMap,m_sysFact,i);
                 m_systemsMap[i]->addEntity(eid);
+                m_entities->setFlags(eid,i,m_entities->m_systems);
+
+                associate();
             }
             i!=0 ? i*=2 : i++;
         }
+
         return success;
     }
 
@@ -145,7 +159,7 @@ public:
 
 
 private:
-
+    std::map<ECS::ecsint,bool> associated{};
     template<class T1, class T2>
     bool registerType(T1 &map, T2 factory,ECS::ecsint id)
     {
@@ -155,23 +169,24 @@ private:
         {
 
             map[id] = factory(id);
+
         }
         return true;
         //                m_systemsMap[i]->addEntity(eid);
 
     }
-//    registerMap m_compTypes;
-//    registerMap m_sysTypes;
-//    typeVec m_svType;
-//    typeVec m_comType;
+    //    registerMap m_compTypes;
+    //    registerMap m_sysTypes;
+    //    typeVec m_svType;
+    //    typeVec m_comType;
     std::unique_ptr<Entities>m_entities{};
 
     //    compMap m_componentMap;
     //    sysMap m_systemMap;
-    sysMapUP m_systemsMap{};
-    compMap m_compsMap{};
-    CompAttached m_compsAttached{};
-//    mapEntSys m_entSys;
+    System::sysMapUP m_systemsMap{};
+    System::CompMap m_compsMap{};
+    //    CompAttached m_compsAttached{};
+    //    mapEntSys m_entSys;
 
     compFactoryFunction m_compFact;
     sysFactoryFunction m_sysFact;

@@ -21,17 +21,45 @@ public:
 
 
 private:
+    ecsint TOP{0};
     const std::vector<ecsint> &components() const;
     Entities(const ECS::ecsint MAX);
-    void setComponents(const ecsint &index, const ecsint &comp);
-    void removeComponent(const ecsint &component, const ecsint &index);
-    void toggleComponent(const ecsint &component, const ecsint &index);//not used but here for reference
-    const bool hasComponents(const ecsint &index) const;
-    const bool hasComponents(const ecsint &index,const ecsint &components) const;
+
+    template<class T>
+    void setFlags(const ecsint &index, const ecsint &flags, T &vec)
+    {
+        vec[index] |= flags;
+    }
+
+    template<class T>
+    void removeFlags(const ecsint &index, const ecsint &flags, T &vec)
+    {
+        vec[index] &= (~flags);
+    }
+
+    template<class T>
+    void toggleFlags(const ecsint &flags, const ecsint &index,T &vec)
+    {
+        vec[index] ^= flags;
+    }
+
+    template<class T>
+    const bool hasFlags(const ecsint &index, const T &vec) const
+    {
+        return vec[index]!=0;
+    }
+
+    template<class T>
+    const bool hasFlags(const ecsint &index,const ecsint &flags, const T &vec) const
+    {
+        return ((vec[index] & flags));
+    }
+
     const ecsint addEntity(const ecsint comp);
     const bool removeEntity(const ecsint id);
     const ecsint MAX;
     std::vector<ecsint> m_components{};
+    std::vector<ecsint> m_systems{};
 };
 }
 #endif // ENTITIES_H

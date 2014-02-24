@@ -29,27 +29,29 @@ bool System::hasSystem(ecsint eid)
     return true;
 }
 
+
+
 bool System::attachComponent(ecsint cid,  Component *comp)
 {
-    auto it = m_compMap.find(cid);
-    if(it == m_compMap.end())
-    {
-        m_compMap[cid] = comp;
-        return true;
-    }
-    return false;
+    //    auto it = m_compMap.find(cid);
+    //    if(it == m_compMap.end())
+//    {
+//        m_compMap[cid] = comp;
+//        return true;
+//    }
+//    return false;
 }
 
 bool System::detachComponent(ecsint cid)
 {
     //    m_compMap[cid] = nullptr;
-    auto it = m_compMap.find(cid);
-    if(it != m_compMap.end())
-    {
-        m_compMap.erase(it);
-        return true;
-    }
-    return false;
+//    auto it = m_compMap.find(cid);
+//    if(it != m_compMap.end())
+//    {
+//        m_compMap.erase(it);
+//        return true;
+//    }
+//    return false;
 
 
 }
@@ -67,14 +69,16 @@ void System::setName(const std::string &name)
 {
     m_name = name;
 }
-const std::unordered_map<ecsint, Component *> &System::compMap() const
+const System::CompMap &System::compMap() const
 {
-    return m_compMap;
+    return *m_compMap;
 }
-const ecsint System::entityId() const
+
+void System::setCompMap(System::CompMap &cm)
 {
-    return m_entityId;
+    m_compMap = &cm;
 }
+
 
 
 
