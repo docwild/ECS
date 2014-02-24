@@ -40,7 +40,7 @@ const bool Entities::hasComponents(const ecsint &index) const
 const ecsint Entities::addEntity(const ecsint comp)
 {
     ecsint index = 0;
-    for(index=1;index<MAX;index++)
+    for(index=1;index<=MAX;index++)
     {
         if (!hasComponents(index))
         {
@@ -49,7 +49,7 @@ const ecsint Entities::addEntity(const ecsint comp)
         }
     }
 
-    return MAX;
+    return MAX+1;
 
 }
 

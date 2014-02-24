@@ -8,7 +8,8 @@
 //#include "ECS/Components/cbounds.h"
 //#include "ECS/Components/cinput.h"
 //#include "ECS/Components/cposition.h"
-//#include "ECS/Components/cspeed.h"
+#include "cspeed.h"
+#include "../ECS/systemmanager.h"
 //#include "ECS/Components/csprite.h"
 enum CENUM:ECS::ecsint
 {
@@ -23,6 +24,7 @@ enum CENUM:ECS::ecsint
 class CompFactory
 {
 public:
-    std::unique_ptr<ECS::Component> operator() (const ECS::ecsint type,const std::string &name,const ECS::ecsint eid) const;
+    std::unique_ptr<ECS::Component> operator() (const ECS::ecsint type) const;
+    ECS::CSpeed *getSpeedComponent(const ECS::ecsint eid,ECS::SystemManager &sysman);
 };
 #endif // COMPONENT_FACTORY_H

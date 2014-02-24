@@ -31,8 +31,12 @@ public:
 protected:
 
 
-    explicit System(const std::string &name,ECS::ecsint eid);
+    explicit System(const std::string &name);
+    using entMap = std::unordered_map<ECS::ecsint,bool>;
 
+    virtual bool addEntity(ECS::ecsint eid);
+    bool hasSystem(ECS::ecsint eid);
+    entMap m_entMap;
 
     std::string m_name{};
     std::chrono::duration<double, std::milli> m_delay{std::chrono::milliseconds(0)};

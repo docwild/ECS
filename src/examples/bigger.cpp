@@ -54,9 +54,9 @@ int main()
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
-    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
-    ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
-    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
+//    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+//    ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
+//    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
         return(100);
@@ -82,20 +82,20 @@ int main()
     ECS::SMovement *smo3 = m_sysFact.getMovementSystem(extra,sysman);
     assert(smo3);
 
-    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
-    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
+//    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
+//    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
 
-    ok &= sysman.attachComponent(smo2,CENUM::CPOSITION);
+//    ok &= sysman.attachComponent(smo2,CENUM::CPOSITION);
 
-    ok &= sysman.attachComponent(smo3,CENUM::CSPEED);
-    ok &= sysman.attachComponent(smo3,CENUM::CPOSITION);
+//    ok &= sysman.attachComponent(smo3,CENUM::CSPEED);
+//    ok &= sysman.attachComponent(smo3,CENUM::CPOSITION);
 
     if(!ok)
     {
         return(101);
     }
-    smo->getPositionComponent()->setX(50);
-    smo2->getPositionComponent()->setX(5);
+//    smo->getPositionComponent()->setX(50);
+//    smo2->getPositionComponent()->setX(5);
 
 
     smo2->setDelay(duration_cast<nanoseconds>(seconds(1)));
@@ -104,9 +104,9 @@ int main()
     sysman.setSystemUpdate(false,SENUM::SMOVEMENT,smo3->entityId());
 
     typedef std::function<bool (System*,ECS::ecsint)> func;
-    auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
-    auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
-    std::vector<func> vfunc{funcptr,funcptr2};
+//    auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
+//    auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
+//    std::vector<func> vfunc{funcptr,funcptr2};
     auto smo3update = std::bind(&SMovement::update,smo3);
 
     MyListener lis;

@@ -1,6 +1,6 @@
 #include "cspeed.h"
 using namespace ECS;
-CSpeed::CSpeed(const std::string &name, ECS::ecsint eid):Component(name,eid)
+CSpeed::CSpeed():Component("Speed")
 {
 //    std::cout<<"IN CSpeed: name= "<<m_name<<std::endl;
 }
