@@ -34,11 +34,11 @@ int main()
     ECS::ecsint ie=0;
     while( true )
     {
-
+        if(ie == MAX-1)
+            break;
         ie  = sysman.addEntity(SENUM::SMOVEMENT,
                                 CENUM::CPOSITION|CENUM::CSPEED);
-        if(ie > MAX)
-            break;
+
         ECS::SMovement *smo = m_sysFact.getMovementSystem(ie,sysman);
         assert(smo);
 
