@@ -44,6 +44,30 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     return MAX;
 }
 
+SystemManager::hilow SystemManager::bounds(ecsint num)
+{
+    if (!num)
+        return hilow();
+
+    ECS::ecsint hb = 1;
+    ECS::ecsint lb = 0;
+    ECS::ecsint tmp = num;
+    while (tmp >>= 1)
+        hb <<= 1;
+    for(int x = 1; x <= hb; x *=2)
+    {
+        if((x & num) == x)
+        {
+            lb = x;
+            break;
+        }
+    }
+    hilow ret;
+    ret["high"]=hb;
+    ret["low"]=lb;
+    return ret;
+}
+
 void SystemManager::update(const std::chrono::duration<double, std::nano> &time_span)
 {
     for(auto &sys: m_systemMap)
@@ -97,6 +121,35 @@ bool SystemManager::attachComponent(System *sys, const ecsint cid)
 bool SystemManager::detachComponent(System *sys, const ecsint cid)
 {
     return sys->detachComponent(cid);
+}
+
+bool SystemManager::attachSystem(const ecsint eid, const ecsint sysid)
+{
+    auto bnds = bounds(sysid);
+    bool ret = false;
+    for(int i = bnds["low"];i<=bnds["high"];)
+    {
+        if((i & sysid) == i )
+        {
+            System *s = getSystem(eid,i);
+            if(!s)
+            {
+                if(!addToMap(i,eid,m_sysFact,m_systemMap))
+                    return false;
+                if(!(s = getSystem(eid,i)))
+                    return false;
+            }
+            ret = true;
+        }
+        i!=0 ? i*=2 : i++;
+    }
+    return ret;
+}
+
+bool SystemManager::detachSystem(const ecsint eid, const ecsint sysid)
+{
+    setSystemUpdate(false,sysid,eid);
+    return true;
 }
 
 ecsint SystemManager::entityCount()

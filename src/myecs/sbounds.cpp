@@ -12,18 +12,22 @@ void SBounds::update()
     if(m_cPosition->getX()>m_cBounds->getX1())
     {
         m_cPosition->setX(m_cBounds->getX1());
+        m_cSpeed->setX(-m_cSpeed->getX());
     }
     if(m_cPosition->getX()<m_cBounds->getX())
     {
         m_cPosition->setX(m_cBounds->getX());
+        m_cSpeed->setX(-m_cSpeed->getX());
     }
     if(m_cPosition->getY()>m_cBounds->getY1())
     {
         m_cPosition->setY(m_cBounds->getY1());
+        m_cSpeed->setY(-m_cSpeed->getY());
     }
     if(m_cPosition->getY()<m_cBounds->getY())
     {
         m_cPosition->setY(m_cBounds->getY());
+        m_cSpeed->setY(-m_cSpeed->getY());
     }
     std::cout<<"Pos X:"<<m_cPosition->getX()<<std::endl;
     std::cout<<"Pos Y:"<<m_cPosition->getY()<<std::endl;
@@ -45,6 +49,11 @@ bool SBounds::attachComponent(ecsint eid, Component *comp)
         m_cBounds = dynamic_cast<CBounds*>(comp);
         ret = true;
     }
+    if(!m_cSpeed)
+    {
+        m_cSpeed = dynamic_cast<CSpeed*>(comp);
+        ret = true;
+    }
     return  ret;
 }
 
@@ -62,6 +71,11 @@ bool SBounds::detachComponent(ecsint cid)
         {
             m_cBounds = nullptr;
             return true;
+        }
+        if(m_cSpeed == cmp)
+        {
+             m_cSpeed = nullptr;
+             return true;
         }
     }
     catch(std::out_of_range e)

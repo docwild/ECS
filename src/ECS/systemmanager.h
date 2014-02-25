@@ -32,29 +32,8 @@ public:
     const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component);
 
     using hilow = std::unordered_map<std::string,ECS::ecsint>;
-    hilow bounds(ECS::ecsint num)
-    {
-        if (!num)
-            return hilow();
+    hilow bounds(ECS::ecsint num);
 
-        ECS::ecsint hb = 1;
-        ECS::ecsint lb = 0;
-        ECS::ecsint tmp = num;
-        while (tmp >>= 1)
-            hb <<= 1;
-        for(int x = 1; x <= hb; x *=2)
-        {
-            if((x & num) == x)
-            {
-                lb = x;
-                break;
-            }
-        }
-        hilow ret;
-        ret["high"]=hb;
-        ret["low"]=lb;
-        return ret;
-    }
 
     template<class T1,class T2>
     bool  addToMap(const ecsint &bits, const ecsint &index, const T1 &factory,T2 &map)
@@ -83,8 +62,8 @@ public:
 
     bool detachComponent(System *sys, const ecsint cid);
 
-
-
+    bool attachSystem(const ecsint eid, const ecsint sysid);
+    bool detachSystem(const ecsint eid, const ecsint sysid);
 
     ECS::ecsint entityCount();
     Component *getComponent(const ecsint eid, const ecsint cid);

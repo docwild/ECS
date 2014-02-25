@@ -33,7 +33,7 @@ int main()
 
 
     const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT|SENUM::SBOUNDS,
-                                              CENUM::CPOSITION|CENUM::CSPEED|CENUM::CBOUNDS);
+                                              CENUM::CPOSITION|CENUM::CSPEED);
 
     if(play == MAX)
         return MAX;
@@ -45,7 +45,8 @@ int main()
     assert(sbo);
 
 //
-//    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
+    ok &= sysman.attachComponent(sbo,CENUM::CBOUNDS);
+    ok &= sysman.detachSystem(play,SENUM::SBOUNDS);
 //    ok &= sysman.detachComponent(smo,CENUM::CINPUT);
 //    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
 
@@ -57,15 +58,15 @@ int main()
 //    smo->getPositionComponent()->setX(50);
 
 
-    smo->setDelay(duration_cast<nanoseconds>(milliseconds(100)));
-    sysman.setSystemUpdate(false,SENUM::SBOUNDS,sbo->entityId());
+    smo->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
+
     smo->addListener(std::bind(&SBounds::update,sbo));//chain updates, dont forget to disable auto updating for the chained system
 
     CBounds *cb = sbo->cBounds();
     cb->setX(0);
-    cb->setX1(500);
+    cb->setX1(25);
     cb->setY(0);
-    cb->setY(500);
+    cb->setY(15);
     unsigned long long i = 0;
 
     duration<double,std::nano> looptime;

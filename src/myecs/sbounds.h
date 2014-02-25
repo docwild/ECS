@@ -3,6 +3,7 @@
 #include "../ECS/system.h"
 #include "cposition.h"
 #include "cbounds.h"
+#include "cspeed.h"
 namespace ECS
 {
 class SBounds : public System
@@ -20,6 +21,7 @@ public:
 private:
     ECS::CPosition *m_cPosition;
     ECS::CBounds *m_cBounds;
+    ECS::CSpeed *m_cSpeed;
 };
 }
 #endif // SBOUNDS_H
