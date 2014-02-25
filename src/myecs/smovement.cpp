@@ -3,6 +3,7 @@
 #include "cposition.h"
 #include <cassert>
 using namespace ECS;
+unsigned long long SMovement::counter=0;
 SMovement::SMovement(ecsint eid):System(eid),m_cSpeed(),m_cPosition()
 {
     m_name="Movement";
@@ -15,15 +16,15 @@ void SMovement::update()
     if(!m_cPosition)
         return;
 
-
+    counter++;
     ecsint id = m_entityId;
 
     if(m_cSpeed)
     {
         if(m_cPosition->getX() < 500)
             m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
-        if(m_cSpeed->getX() < 5)
-            m_cSpeed->setX(m_cSpeed->getX()+0.5);
+        if(m_cSpeed->getX() < 5 && m_cSpeed->getX() > -5)
+            m_cSpeed->setX(m_cSpeed->getX()+m_cSpeed->getDx());
         std::cout << m_cSpeed->name()<<" Speed X: "<<m_cSpeed->getX()<<std::endl;
 
         //            m_cSpeed->setX(5);

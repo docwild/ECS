@@ -24,3 +24,23 @@ void CSpeed::setY(const float value)
 {
     y = value;
 }
+float CSpeed::getDx() const
+{
+    return dx;
+}
+
+void CSpeed::setDx(float value)
+{
+    dx = value;
+}
+float CSpeed::getDy() const
+{
+    return dy;
+}
+
+void CSpeed::setDy(float value)
+{
+    dy = value;
+}
+
+

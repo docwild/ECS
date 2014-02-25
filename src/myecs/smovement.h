@@ -15,6 +15,7 @@ public:
     bool detachComponent(ecsint cid) override;
     inline void setDelay(const std::chrono::duration<double, std::nano> delay){m_delay = delay;/*std::cout<<"Delay set: "<<delay.count()<<std::endl;*/}
 
+    static unsigned long long counter;
     ECS::CPosition *getPositionComponent()const{return m_cPosition;}
 
 

@@ -44,6 +44,7 @@ int main()
     ECS::SBounds *sbo = m_sysFact.getBoundsSystem(play,sysman);
     assert(sbo);
 
+    smo->getSpeedComponent()->setDx(1);
 //
     ok &= sysman.attachComponent(sbo,CENUM::CBOUNDS);
     ok &= sysman.detachSystem(play,SENUM::SBOUNDS);
@@ -73,7 +74,7 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(timetaken < std::chrono::seconds(15))
+    while(timetaken < std::chrono::seconds(30))
     {
 
 
@@ -91,7 +92,8 @@ int main()
         i++;
         timetaken = end - start;
     }
-    std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
+    std::cerr<<"Total Time::"<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl<<"Iterations::"<<i<<std::endl;
+    std::cerr<<"SMovement iterations::"<<SMovement::counter<<std::endl;
     std::flush(std::cerr);
     return 0;
 }
