@@ -18,9 +18,13 @@ std::unique_ptr<ECS::System> SystemFactory::operator()(const ECS::ecsint type,co
 //    case SINPUT:
 //        return std::unique_ptr<ECS::System>(new ECS::SInput(name));
     case SMOVEMENT:
-        return std::unique_ptr<ECS::System>(new ECS::SMovement(eid));
+        return std::unique_ptr<ECS::System>(new ECS::SMovement(eid,SMOVEMENT));
     case SBOUNDS:
-        return std::unique_ptr<ECS::System>(new ECS::SBounds(eid));
+        return std::unique_ptr<ECS::System>(new ECS::SBounds(eid,SBOUNDS));
+#ifdef DOSFML
+    case SDRAW:
+        return std::unique_ptr<ECS::System>(new ECS::SDraw(eid,SDRAW));
+#endif
     default:
         return nullptr;
     }
@@ -35,3 +39,9 @@ ECS::SBounds *SystemFactory::getBoundsSystem(const ECS::ecsint eid, ECS::SystemM
 {
     return dynamic_cast<ECS::SBounds*>(sysman.getSystem(eid,SENUM::SBOUNDS));
 }
+#ifdef DOSFML
+ECS::SDraw *SystemFactory::getDrawSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+{
+    return dynamic_cast<ECS::SDraw*>(sysman.getSystem(eid,SENUM::SDRAW));
+}
+#endif

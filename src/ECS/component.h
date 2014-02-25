@@ -21,9 +21,11 @@ public:
 
 protected:
     std::string m_name{};
-    explicit Component(ECS::ecsint eid);
+    ECS::ecsint m_componentId{};
+    explicit Component(ECS::ecsint eid,ECS::ecsint cid);
 private:
     void setName(const std::string &name);
+
 
 };
 }

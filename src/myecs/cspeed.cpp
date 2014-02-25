@@ -1,6 +1,6 @@
 #include "cspeed.h"
 using namespace ECS;
-CSpeed::CSpeed(ECS::ecsint eid):Component(eid)
+CSpeed::CSpeed(ECS::ecsint eid, ecsint cid):Component(eid,cid)
 {
     m_name="Speed";
 }

@@ -55,7 +55,7 @@ public:
     }
 
     void update(const std::chrono::duration<double, std::nano> &time_span);
-    void setSystemUpdate(bool update, ecsint sysid, ecsint eid);
+    void chainSystem(System *sys, System *sys2, const std::function<void ()> &func);
 
 
     bool attachComponent(System *sys, const ecsint cid);
@@ -71,6 +71,7 @@ public:
 
 
 private:
+    void setSystemUpdate(bool update, ecsint sysid, ecsint eid);
     void addrefs(ECS::ecsint eid,System *sys)
     {
         sys->addRef(&m_componentMap[eid]);

@@ -1,6 +1,6 @@
 #include "component.h"
 using namespace ECS;
-Component::Component(ECS::ecsint eid)
+Component::Component(ECS::ecsint eid, ecsint cid):m_componentId(cid)
 {
 }
 std::string Component::name() const

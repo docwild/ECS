@@ -9,7 +9,7 @@ namespace ECS
 class CInput : public Component
 {
 public:
-    CInput(ECS::ecsint eid);
+    CInput(ECS::ecsint eid, ecsint cid);
     ~CInput(){};
 
 

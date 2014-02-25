@@ -1,6 +1,15 @@
 project(ECS)
 cmake_minimum_required(VERSION 2.8)
 
+# Detect and add SFML
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+#Find any version 2.X of SFML
+#See the FindSFML.cmake file for additional details and instructions
+if(DOSFML)
+    find_package(SFML 2 REQUIRED system window graphics network audio)
+    add_definitions(-DDOSFML)
+endif()
+
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 message("BUILD TYPE= " ${CMAKE_BUILD_TYPE})
 #-DCMAKE_BUILD_TYPE=Debug
@@ -12,8 +21,11 @@ set(ITEMS
     src/myecs/systemfactory.h
     src/myecs/cposition.cpp
     src/myecs/cposition.h
+    src/myecs/csize.cpp
+    src/myecs/csize.h
     src/myecs/cspeed.cpp
     src/myecs/cspeed.h
+
     src/myecs/smovement.cpp
     src/myecs/smovement.h
     src/myecs/cinput.cpp
@@ -23,7 +35,13 @@ set(ITEMS
     src/myecs/sbounds.cpp
     src/myecs/sbounds.h
 )
-
+if(DOSFML)
+    set(ITEMS
+        ${ITEMS}
+    src/myecs/sdraw.cpp
+    src/myecs/sdraw.h
+)
+endif()
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 #aux_source_directory(./ECS ECS_LIST)
 set(ECS_LIST
@@ -58,11 +76,17 @@ set(TESTS
     ${CMAKE_SOURCE_DIR}/src/tests/test1.cpp
 
 )
+set(SFMLEX1
+    ${CMAKE_SOURCE_DIR}/src/examples/sfml1.cpp
+)
 set(TESTSYSTEM
     ${CMAKE_SOURCE_DIR}/src/tests/testSystem.cpp
 )
 add_library(ecs SHARED ${ECS_LIST})
-add_library(myecs ${ITEMS})
+add_library(myecs ${ITEMS} )
+if(DOSFML)
+    target_link_libraries(myecs ${SFML_LIBRARIES})
+endif()
 #-- Add an Option to toggle the generation of the API documentation
 option(BUILD_DOCUMENTATION "Use Doxygen to create the HTML based API documentation" OFF)
 if(BUILD_DOCUMENTATION)
@@ -82,6 +106,7 @@ if(BUILD_DOCUMENTATION)
   # then leave out the 'ALL' keyword from the above command.
 endif()
 option(BUILD_EXAMPLES "Compile test programs" ON)
+option(DOSFML "Compile test programs" OFF)
 if(BUILD_EXAMPLES)
 #add_definitions(-DCTEST)
     add_executable(simple ${SIMPLE})
@@ -92,6 +117,11 @@ if(BUILD_EXAMPLES)
     target_link_libraries(bigger ecs myecs)
     target_link_libraries(manyents ecs myecs)
     target_link_libraries(bounding ecs myecs)
+    if(DOSFML)
+      include_directories(${SFML_INCLUDE_DIR})
+      add_executable(sfmlex1 ${SFMLEX1})
+      target_link_libraries(sfmlex1 ${SFML_LIBRARIES} ecs myecs)
+    endif()
 endif()
 option(BUILD_TESTS "Compile tests" OFF)
 if(BUILD_TESTS)

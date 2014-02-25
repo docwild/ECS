@@ -7,7 +7,7 @@ namespace ECS
 class CBounds : public Component
 {
 public:
-    CBounds(ecsint id);
+    CBounds(ecsint id, ecsint cid);
     int getX() const;
     void setX(int value);
 

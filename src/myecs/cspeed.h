@@ -7,7 +7,7 @@ namespace ECS
 class CSpeed : public Component
 {
 public:
-    explicit CSpeed(ECS::ecsint eid);
+    explicit CSpeed(ECS::ecsint eid, ecsint cid);
     const float getX() const;
     void setX(const float value);
 

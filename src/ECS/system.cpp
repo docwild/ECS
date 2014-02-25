@@ -1,6 +1,6 @@
 #include "system.h"
 using namespace ECS;
-System::System(ecsint eid):m_entityId(eid)
+System::System(ecsint eid, ecsint sid):m_entityId(eid),m_systemId(sid)
 {
 }
 const System::CompMap * const System::cmap() const
@@ -22,7 +22,7 @@ const std::string &System::name() const
 
 void System::addListener(System::listype func)
 {
-    m_listenFunction = func;
+    m_listenFunction = std::move(func);
 }
 
 void System::setName(const std::string &name)

@@ -37,7 +37,7 @@ public:
 protected:
 
 
-    explicit System(ECS::ecsint eid);
+    explicit System(ECS::ecsint eid,ECS::ecsint sid);
     void addRef(CompMap *cm)
     {
         m_cmap = cm;
@@ -52,6 +52,7 @@ protected:
     std::chrono::duration<double, std::milli> m_delayCounter{std::chrono::milliseconds(0)};
     const CompMap *m_cmap;
     ECS::ecsint m_entityId{};
+    ECS::ecsint m_systemId{};
     listype m_listenFunction{nullptr};
     bool m_update{true};
 private:

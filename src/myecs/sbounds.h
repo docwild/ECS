@@ -4,12 +4,13 @@
 #include "cposition.h"
 #include "cbounds.h"
 #include "cspeed.h"
+#include "csize.h"
 namespace ECS
 {
 class SBounds : public System
 {
 public:
-    SBounds(ECS::ecsint eid);
+    SBounds(ECS::ecsint eid, ecsint sid);
     void update();
     bool attachComponent(ecsint eid,  Component * comp) override;
     bool detachComponent(ecsint cid) override;
@@ -17,11 +18,12 @@ public:
 
     ECS::CPosition *getPositionComponent()const{return m_cPosition;}
     ECS::CBounds *cBounds() const{return m_cBounds;}
-
+    static unsigned long long counter;
 private:
     ECS::CPosition *m_cPosition;
     ECS::CBounds *m_cBounds;
     ECS::CSpeed *m_cSpeed;
+    ECS::CSize *m_cSize;
 };
 }
 #endif // SBOUNDS_H

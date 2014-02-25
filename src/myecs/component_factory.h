@@ -17,7 +17,8 @@ enum CENUM:ECS::ecsint
     CSPEED = 1 << 2,
     CINPUT = 1 << 3,
     CACTIONS = 1 << 4,
-    CBOUNDS = 1 << 5
+    CBOUNDS = 1 << 5,
+    CSIZE = 1 << 6
 
 };
 class CompFactory

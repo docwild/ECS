@@ -1,6 +1,6 @@
 #include "cposition.h"
 using namespace ECS;
-CPosition::CPosition(ECS::ecsint eid):Component(eid)
+CPosition::CPosition(ECS::ecsint eid, ecsint cid):Component(eid,cid)
 {
     m_name="Position";
 }

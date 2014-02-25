@@ -100,6 +100,14 @@ void SystemManager::update(const std::chrono::duration<double, std::nano> &time_
 
 }
 
+void SystemManager::chainSystem(System *sys, System *sys2,const std::function<void ()> &func)
+{
+    detachSystem(sys2->m_entityId,sys2->m_systemId);
+    sys->addListener(func);
+}
+
+
+
 void SystemManager::setSystemUpdate(bool update,ECS::ecsint sysid,ECS::ecsint eid)
 {
     getSystem(eid,sysid)->m_update = update;

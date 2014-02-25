@@ -4,7 +4,7 @@
 #include <cassert>
 using namespace ECS;
 unsigned long long SMovement::counter=0;
-SMovement::SMovement(ecsint eid):System(eid),m_cSpeed(),m_cPosition()
+SMovement::SMovement(ecsint eid, ecsint sid):System(eid,sid),m_cSpeed(),m_cPosition()
 {
     m_name="Movement";
 }
@@ -12,7 +12,7 @@ SMovement::SMovement(ecsint eid):System(eid),m_cSpeed(),m_cPosition()
 void SMovement::update()
 {
     //    assert(m_cPosition);
-    std::cout<<"Entity: "<<m_entityId<<std::endl;
+//    std::cout<<"Entity: "<<m_entityId<<std::endl;
     if(!m_cPosition)
         return;
 
@@ -21,11 +21,11 @@ void SMovement::update()
 
     if(m_cSpeed)
     {
-        if(m_cPosition->getX() < 500)
+//        if(m_cPosition->getX() < 500)
             m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
-        if(m_cSpeed->getX() < 5 && m_cSpeed->getX() > -5)
+        if(m_cSpeed->getX() < 10 && m_cSpeed->getX() > -10)
             m_cSpeed->setX(m_cSpeed->getX()+m_cSpeed->getDx());
-        std::cout << m_cSpeed->name()<<" Speed X: "<<m_cSpeed->getX()<<std::endl;
+//        std::cout << m_cSpeed->name()<<" Speed X: "<<m_cSpeed->getX()<<std::endl;
 
         //            m_cSpeed->setX(5);
         //        std::cout<<std::endl;
@@ -35,24 +35,26 @@ void SMovement::update()
 
     if(m_listenFunction)
         m_listenFunction();
-    std::cout<<std::endl;
+//    std::cout<<std::endl;
 }
 
 bool SMovement::attachComponent(ecsint eid, Component *comp)
 {
-    bool ret = false;
+
     if(!m_cSpeed)
     {
         m_cSpeed = dynamic_cast<CSpeed*>(comp);
-        ret = true;
+        if(m_cSpeed)
+            return true;
     }
     if(!m_cPosition)
     {
         m_cPosition = dynamic_cast<CPosition*>(comp);
-        ret = true;
+        if(m_cPosition)
+            return true;
     }
 
-    return  ret;
+    return  false;
 }
 
 bool SMovement::detachComponent(ecsint cid)

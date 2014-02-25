@@ -89,9 +89,9 @@ int main()
 
 
     smo2->setDelay(duration_cast<nanoseconds>(seconds(1)));
-    smo->setDelay(duration_cast<nanoseconds>(milliseconds(5000)));
+    smo->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
 //    smo3->setDelay(duration_cast<nanoseconds>(milliseconds(1800)));
-    sysman.setSystemUpdate(false,SENUM::SMOVEMENT,smo3->entityId());
+    //sysman.setSystemUpdate(false,SENUM::SMOVEMENT,smo3->entityId());
 
     typedef std::function<bool (System*,ECS::ecsint)> func;
     auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
@@ -102,7 +102,7 @@ int main()
     MyListener lis2;
 
     smo->addListener(lis("THIS IS MY MESSAGE"));
-    smo2->addListener(std::bind(&SMovement::update,smo3));//chain updates, dont forget to disable auto updating for the chained system
+    sysman.chainSystem(smo2,smo3,std::bind(&SMovement::update,smo3));
     smo3->addListener(lis2(61));
 
     unsigned long long i = 0;
@@ -119,7 +119,7 @@ int main()
     auto loopstart = end;
     auto timer = end;
     auto timerfuture = high_resolution_clock::now() + seconds(1);
-    while(/*timetaken < std::chrono::seconds(5)*/i < 1000000)
+    while(timetaken < std::chrono::seconds(5))
     {
 
 
@@ -146,7 +146,9 @@ int main()
         timetaken = end - start;
         i++;
     }
-    std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
+    std::cerr<<"Total Time::"<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl<<"Iterations::"<<i<<std::endl;
+    std::cerr<<"SMovement iterations::"<<SMovement::counter<<std::endl;
+    std::cerr<<"SBounds iterations::"<<SBounds::counter<<std::endl;
     std::flush(std::cerr);
     return 0;
 }

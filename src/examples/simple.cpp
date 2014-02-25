@@ -45,8 +45,8 @@ int main()
 
 //
 //    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
-    ok &= sysman.detachComponent(smo,CENUM::CINPUT);
-    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
+//    ok &= sysman.detachComponent(smo,CENUM::CINPUT);
+//    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
 
 
     if(!ok)
@@ -65,7 +65,7 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(/*timetaken < std::chrono::seconds(5)*/i<2000000)
+    while(timetaken < std::chrono::seconds(5))
     {
 
 
@@ -83,7 +83,9 @@ int main()
         i++;
         timetaken = end - start;
     }
-    std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
+    std::cerr<<"Total Time::"<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl<<"Iterations::"<<i<<std::endl;
+    std::cerr<<"SMovement iterations::"<<SMovement::counter<<std::endl;
+    std::cerr<<"SBounds iterations::"<<SBounds::counter<<std::endl;
     std::flush(std::cerr);
     return 0;
 }

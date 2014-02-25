@@ -25,8 +25,8 @@ int main()
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
-//    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
-//    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
+    //    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+    //    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
         return(100);
@@ -45,23 +45,21 @@ int main()
     assert(sbo);
 
     smo->getSpeedComponent()->setDx(1);
-//
+    //
     ok &= sysman.attachComponent(sbo,CENUM::CBOUNDS);
-    ok &= sysman.detachSystem(play,SENUM::SBOUNDS);
-//    ok &= sysman.detachComponent(smo,CENUM::CINPUT);
-//    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
+
 
 
     if(!ok)
     {
         return(101);
     }
-//    smo->getPositionComponent()->setX(50);
+    //    smo->getPositionComponent()->setX(50);
 
 
     smo->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
 
-    smo->addListener(std::bind(&SBounds::update,sbo));//chain updates, dont forget to disable auto updating for the chained system
+    sysman.chainSystem(smo,sbo,std::bind(&SBounds::update,sbo));//chain updates
 
     CBounds *cb = sbo->cBounds();
     cb->setX(0);
@@ -74,7 +72,7 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(timetaken < std::chrono::seconds(30))
+    while(timetaken < std::chrono::seconds(10))
     {
 
 
@@ -82,10 +80,10 @@ int main()
         int x = 0;
 
 
-            looptime = end - loopstart;
-            loopstart = end;
-            end = high_resolution_clock::now();
-            sysman.update(looptime);
+        looptime = end - loopstart;
+        loopstart = end;
+        end = high_resolution_clock::now();
+        sysman.update(looptime);
 
 
 
@@ -94,6 +92,7 @@ int main()
     }
     std::cerr<<"Total Time::"<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl<<"Iterations::"<<i<<std::endl;
     std::cerr<<"SMovement iterations::"<<SMovement::counter<<std::endl;
+    std::cerr<<"SBounds iterations::"<<SBounds::counter<<std::endl;
     std::flush(std::cerr);
     return 0;
 }

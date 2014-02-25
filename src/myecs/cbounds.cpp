@@ -1,6 +1,6 @@
 #include "cbounds.h"
 using namespace ECS;
-CBounds::CBounds(ecsint id):Component(id)
+CBounds::CBounds(ecsint id, ecsint cid):Component(id,cid)
 {
 }
 int CBounds::getX() const
