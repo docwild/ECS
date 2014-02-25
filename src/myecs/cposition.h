@@ -7,7 +7,7 @@ namespace ECS
 class CPosition : public Component
 {
 public:
-    explicit CPosition();
+    explicit CPosition( ECS::ecsint eid);
     const float getX() const;
     void setX(const float value);
 

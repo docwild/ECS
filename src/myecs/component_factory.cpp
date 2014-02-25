@@ -1,7 +1,8 @@
 #include "component_factory.h"
 #include "cposition.h"
 #include "cspeed.h"
-std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type) const
+#include "cinput.h"
+std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type,const ECS::ecsint eid) const
 {
     switch(type)
     {
@@ -10,20 +11,15 @@ std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type)
 //        return std::unique_ptr<ECS::Component>(new ECS::CActions(name));
 //    case CBOUNDS:
 //        return std::unique_ptr<ECS::Component>(new ECS::CBounds(name));
-//    case CINPUT:
-//        return std::unique_ptr<ECS::Component>(new ECS::CInput(name));
+    case CINPUT:
+        return std::unique_ptr<ECS::Component>(new ECS::CInput(eid));
     case CPOSITION:
-        return std::unique_ptr<ECS::Component>(new ECS::CPosition());
+        return std::unique_ptr<ECS::Component>(new ECS::CPosition(eid));
     case CSPEED:
-        return std::unique_ptr<ECS::Component>(new ECS::CSpeed());
+        return std::unique_ptr<ECS::Component>(new ECS::CSpeed(eid));
 //    case CSPRITE:
 //        return std::unique_ptr<ECS::Component>(new ECS::CSprite(name));
     default:
         return nullptr;
     }
-}
-
-ECS::CSpeed *CompFactory::getSpeedComponent(const ECS::ecsint eid, ECS::SystemManager &sysman)
-{
-    return dynamic_cast<ECS::CSpeed*>(sysman.getComponent(eid,CENUM::CSPEED));
 }

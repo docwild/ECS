@@ -1,8 +1,8 @@
 #include "cspeed.h"
 using namespace ECS;
-CSpeed::CSpeed():Component("Speed")
+CSpeed::CSpeed(ECS::ecsint eid):Component(eid)
 {
-//    std::cout<<"IN CSpeed: name= "<<m_name<<std::endl;
+    m_name="Speed";
 }
 
 const float CSpeed::getX() const

@@ -1,60 +1,10 @@
 #include "system.h"
 using namespace ECS;
-System::System(const std::string &name):m_name(name)
+System::System(ecsint eid):m_entityId(eid)
 {
-    //    std::cout<<"constructing system"<<std::endl;
-}
-
-bool System::addEntity(ecsint eid)
-{
-    auto it = m_entMap.find(eid);
-    if(it == m_entMap.end() || !m_entMap[eid])
-    {
-        m_entMap[eid]=true;
-        return true;
-    }
-    return false;
-}
-
-bool System::hasSystem(ecsint eid)
-{
-    try
-    {
-        m_entMap.at(eid);
-    }
-    catch(std::out_of_range e)
-    {
-        return false;
-    }
-    return true;
 }
 
 
-
-bool System::attachComponent(ecsint cid,  Component *comp)
-{
-    //    auto it = m_compMap.find(cid);
-    //    if(it == m_compMap.end())
-//    {
-//        m_compMap[cid] = comp;
-//        return true;
-//    }
-//    return false;
-}
-
-bool System::detachComponent(ecsint cid)
-{
-    //    m_compMap[cid] = nullptr;
-//    auto it = m_compMap.find(cid);
-//    if(it != m_compMap.end())
-//    {
-//        m_compMap.erase(it);
-//        return true;
-//    }
-//    return false;
-
-
-}
 const std::string &System::name() const
 {
     return m_name;
@@ -69,16 +19,11 @@ void System::setName(const std::string &name)
 {
     m_name = name;
 }
-const System::CompMap &System::compMap() const
-{
-    return *m_compMap;
-}
 
-void System::setCompMap(System::CompMap &cm)
+const ecsint System::entityId() const
 {
-    m_compMap = &cm;
+    return m_entityId;
 }
-
 
 
 

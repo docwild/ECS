@@ -16,6 +16,8 @@ set(ITEMS
     src/myecs/cspeed.h
     src/myecs/smovement.cpp
     src/myecs/smovement.h
+    src/myecs/cinput.cpp
+    src/myecs/cinput.h
 )
 
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")

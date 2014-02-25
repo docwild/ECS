@@ -3,112 +3,77 @@
 #include "cposition.h"
 #include <cassert>
 using namespace ECS;
-unsigned long long SMovement::called = 0;
-SMovement::SMovement():System("Movement"),m_cSpeedMap(),m_cPositionMap()
+SMovement::SMovement(ecsint eid):System(eid),m_cSpeed(),m_cPosition()
 {
-
+    m_name="Movement";
 }
 
 void SMovement::update()
 {
-    //    assert(m_cPositionMap);
+    //    assert(m_cPosition);
+    std::cout<<"Entity: "<<m_entityId<<std::endl;
+    if(!m_cPosition)
+        return;
 
-    for(auto &m : m_entMap)
+
+    ecsint id = m_entityId;
+
+    if(m_cSpeed)
     {
-        if (!m.second)
-            continue;
-        if(m_listenFunction)
-            m_listenFunction();
-//        ecsint id = m_entityId;
-        try
-        {
-        std::cout<<"SPEED1= "<<m_cSpeedMap.at(m.first)->getX()<<std::endl;
-        m_cSpeedMap.at(m.first)->setX(m_cSpeedMap.at(m.first)->getX()+1);
-        std::cout<<"SPEED2= "<<m_cSpeedMap.at(m.first)->getX()<<std::endl;
-        }
-        catch(std::out_of_range e)
-        {
-            std::cout<<"no speed"<<std::endl;
-        }
+        if(m_cPosition->getX() < 500)
+            m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
+        if(m_cSpeed->getX() < 5)
+            m_cSpeed->setX(m_cSpeed->getX()+0.5);
+        std::cout << m_cSpeed->name()<<" Speed X: "<<m_cSpeed->getX()<<std::endl;
 
-        called++;
-
+        //            m_cSpeed->setX(5);
+        //        std::cout<<std::endl;
     }
-    //    std::cout<<"Entity: "<<m_entityId<<std::endl;
-    //    if(m_cSpeed)
-    //    {
-    //        if(m_cPosition->getX() < 500)
-    //            m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
-    //        if(m_cSpeed->getX() < 5)
-    //            m_cSpeed->setX(m_cSpeed->getX()+0.5);
-    //    }
 
     //    std::cout <<m_cPosition->name()<<" X: "<<m_cPosition->getX()<<std::endl<<std::endl;
+
+    if(m_listenFunction)
+        m_listenFunction();
+    std::cout<<std::endl;
 }
 
 bool SMovement::attachComponent(ecsint eid, Component *comp)
 {
-    //    bool ret = false;
-    //    if(!System::attachComponent(eid,comp))
-    //        return false;
-    //    if(!m_cSpeed)
-    //    {
-    //        m_cSpeed = dynamic_cast<CSpeed*>(comp);
-    //        ret = true;
-    //    }
-    //    if(!m_cPosition)
-    //    {
-    //        m_cPosition = dynamic_cast<CPosition*>(comp);
-    //        ret = true;
-    //    }
+    bool ret = false;
+    if(!m_cSpeed)
+    {
+        m_cSpeed = dynamic_cast<CSpeed*>(comp);
+        ret = true;
+    }
+    if(!m_cPosition)
+    {
+        m_cPosition = dynamic_cast<CPosition*>(comp);
+        ret = true;
+    }
 
-    //    return  ret;
+    return  ret;
 }
 
 bool SMovement::detachComponent(ecsint cid)
 {
-    //    if(!System::detachComponent(cid))
-    //        return false;
-    //    bool speed = false;
-    //    bool pos = false;
-    //    auto it = m_compMap.cbegin();
-    //    for(;it!= m_compMap.cend();++it)
-    //    {
-    //        if(m_cSpeed == it->second)
-    //        {
-    //            speed = true;
-    //        }
-    //        if(m_cPosition == it->second)
-    //        {
-    //            pos = true;
-    //        }
-
-    //    }
-    //    if(!pos)
-    //        m_cPosition = nullptr;
-    //    if(!speed)
-    //        m_cSpeed = nullptr;
-    //    return true;
-}
-
-bool SMovement::addEntity(ecsint eid)
-{
-    if(System::addEntity(eid))
+    try
     {
-        //        std::cout<<"IN DERIVED"<<std::endl;
-
-        //        auto it = m_cSpeedMap.find(eid);
-        //        if(it == m_cSpeedMap.end())
-        //        {
-        //            m_cSpeedMap.emplace(eid,SpeedUp(new CSpeed()));
-        //        }
-        //        auto it2 = m_cPositionMap.find(eid);
-        //        if(it2 == m_cPositionMap.end())
-        //        {
-        //            m_cPositionMap.emplace(eid,PositionUp(new CPosition()));
-        //        }
-
+        auto cmp = m_cmap->at(cid).get();
+        if(m_cSpeed == cmp)
+        {
+             m_cSpeed = nullptr;
+             return true;
+        }
+        if(m_cPosition == cmp)
+        {
+            m_cPosition = nullptr;
+            return true;
+        }
     }
+    catch(std::out_of_range e)
+    {}
+
+    return false;
 }
 
 
