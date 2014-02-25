@@ -13,7 +13,6 @@ public:
     Component() = delete;
     Component(Component const&) = delete; //no copying
     Component& operator=(Component const&) = delete; //no copying
-//    virtual void poly(){};//enable polymorphism for pointer downcasting
     virtual ~Component(){/*std::cout <<" comp destructor"<<std::endl;*/}
     std::string name() const;
 
@@ -21,7 +20,7 @@ public:
 
 protected:
     std::string m_name{};
-    explicit Component(const std::string &name,ECS::ecsint eid);
+    explicit Component(ECS::ecsint eid);
 private:
     void setName(const std::string &name);
 

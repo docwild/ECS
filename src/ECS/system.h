@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "component.h"
 #include <chrono>
+#include <memory>
 #include <functional>
 #include "ECS.h"
 namespace ECS
@@ -13,7 +14,6 @@ class System
 public:
     friend class SystemManager;
 #ifdef UNITTEST
-//    friend class MockSystem;
 #endif
     typedef std::function<void()> listype;
     System() = delete;//no default
@@ -22,22 +22,32 @@ public:
     virtual ~System(){}
     inline const std::string &name() const;
     virtual void addListener(listype func);
-    virtual bool attachComponent(ecsint cid, Component *comp);
-    virtual bool detachComponent(ecsint cid);
+    virtual bool attachComponent(ecsint cid, Component *comp)=0;
+    virtual bool detachComponent(ecsint cid)=0;
     virtual void update()=0;
     virtual void setDelay( const std::chrono::duration<double, std::nano> delay)=0;
     const ECS::ecsint entityId() const;
-    const std::unordered_map<ecsint, Component *> &compMap() const;
+    typedef std::unique_ptr<Component> compUp;
+    typedef std::unordered_map<ecsint,compUp> CompMap;
+
+
 protected:
 
 
-    explicit System(const std::string &name,ECS::ecsint eid);
-
+    explicit System(ECS::ecsint eid);
+    void addRef(CompMap *cm)
+    {
+        m_cmap = cm;
+        for(auto &c:*m_cmap)
+        {
+            std::cout <<"c:"<<c.first<<std::endl;
+        }
+    }
 
     std::string m_name{};
     std::chrono::duration<double, std::milli> m_delay{std::chrono::milliseconds(0)};
     std::chrono::duration<double, std::milli> m_delayCounter{std::chrono::milliseconds(0)};
-    std::unordered_map<ECS::ecsint, Component*> m_compMap{};
+    CompMap *m_cmap;
     ECS::ecsint m_entityId{};
     listype m_listenFunction{nullptr};
     bool m_update{true};

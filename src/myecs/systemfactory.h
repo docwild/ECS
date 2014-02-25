@@ -18,7 +18,7 @@ enum SENUM:ECS::ecsint
 class SystemFactory
 {
 public:
-    std::unique_ptr<ECS::System> operator() (const ECS::ecsint type,const std::string &name,const ECS::ecsint eid) const;
+    std::unique_ptr<ECS::System> operator() (const ECS::ecsint type,const ECS::ecsint eid) const;
     ECS::SMovement *getMovementSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
 };
 

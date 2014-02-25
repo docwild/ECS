@@ -9,7 +9,7 @@ namespace ECS
 class SMovement : public System
 {
 public:
-    explicit SMovement(const std::string &name,ECS::ecsint eid);
+    explicit SMovement(ECS::ecsint eid);
     void update();
     bool attachComponent(ecsint eid,  Component * comp) override;
     bool detachComponent(ecsint cid) override;

@@ -1,6 +1,6 @@
 #include "component.h"
 using namespace ECS;
-Component::Component(const std::string &name, ECS::ecsint eid):m_name(name)
+Component::Component(ECS::ecsint eid)
 {
 }
 std::string Component::name() const
@@ -14,7 +14,3 @@ void Component::setName(const std::string &name)
 }
 
 
-//void Component::poly()
-//{
-
-//}

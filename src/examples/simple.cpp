@@ -25,15 +25,15 @@ int main()
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
-    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
-    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
+//    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+//    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
         return(100);
 
 
     const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
-                                              CENUM::CPOSITION);
+                                              CENUM::CPOSITION|CENUM::CSPEED);
 
     if(play == MAX)
         return MAX;
@@ -43,6 +43,9 @@ int main()
     assert(smo);
 
 
+//
+//    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
+    ok &= sysman.detachComponent(smo,CENUM::CINPUT);
     ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
 
 
@@ -50,10 +53,10 @@ int main()
     {
         return(101);
     }
-    smo->getPositionComponent()->setX(50);
+//    smo->getPositionComponent()->setX(50);
 
 
-    smo->setDelay(duration_cast<nanoseconds>(seconds(5)));
+    smo->setDelay(duration_cast<nanoseconds>(seconds(1)));
 
 
     unsigned long long i = 0;
@@ -62,20 +65,19 @@ int main()
     auto end = high_resolution_clock::now();
     auto loopstart = end;
     duration<double,std::nano> timetaken;
-    while(/*timetaken < std::chrono::seconds(5)*/i < 1000000)
+    while(/*timetaken < std::chrono::seconds(5)*/i<2000000)
     {
 
 
 
         int x = 0;
 
-        while (x++ < 5)
-        {
+
             looptime = end - loopstart;
             loopstart = end;
             end = high_resolution_clock::now();
             sysman.update(looptime);
-        }
+
 
 
         i++;

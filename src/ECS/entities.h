@@ -1,13 +1,7 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
 #include <vector>
-//#include <memory>
-//#include "systemmanager.h"
-//#include "component.h"
 #include "ECS.h"
-//class SystemManager;
-//class compFactoryFunction;
-//class sysFactoryFunction;
 namespace ECS
 {
 

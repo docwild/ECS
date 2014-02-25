@@ -54,9 +54,6 @@ int main()
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
-    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
-    ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
-    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
         return(100);
@@ -65,7 +62,7 @@ int main()
     const ECS::ecsint play = sysman.addEntity(SENUM::SMOVEMENT,
                                               CENUM::CPOSITION|CENUM::CSPEED);
     const ECS::ecsint nonplay = sysman.addEntity(SENUM::SMOVEMENT,
-                                                 CENUM::CPOSITION);
+                                                 CENUM::CPOSITION|CENUM::CSPEED);
     const ECS::ecsint extra = sysman.addEntity(SENUM::SMOVEMENT,
                                                  CENUM::CPOSITION|CENUM::CSPEED);
 
@@ -82,13 +79,6 @@ int main()
     ECS::SMovement *smo3 = m_sysFact.getMovementSystem(extra,sysman);
     assert(smo3);
 
-    ok &= sysman.attachComponent(smo,CENUM::CSPEED);
-    ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
-
-    ok &= sysman.attachComponent(smo2,CENUM::CPOSITION);
-
-    ok &= sysman.attachComponent(smo3,CENUM::CSPEED);
-    ok &= sysman.attachComponent(smo3,CENUM::CPOSITION);
 
     if(!ok)
     {
@@ -99,7 +89,7 @@ int main()
 
 
     smo2->setDelay(duration_cast<nanoseconds>(seconds(1)));
-    smo->setDelay(duration_cast<nanoseconds>(milliseconds(500)));
+    smo->setDelay(duration_cast<nanoseconds>(milliseconds(5000)));
 //    smo3->setDelay(duration_cast<nanoseconds>(milliseconds(1800)));
     sysman.setSystemUpdate(false,SENUM::SMOVEMENT,smo3->entityId());
 
@@ -107,14 +97,13 @@ int main()
     auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
     auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
     std::vector<func> vfunc{funcptr,funcptr2};
-    auto smo3update = std::bind(&SMovement::update,smo3);
 
     MyListener lis;
     MyListener lis2;
 
     smo->addListener(lis("THIS IS MY MESSAGE"));
+    smo2->addListener(std::bind(&SMovement::update,smo3));//chain updates, dont forget to disable auto updating for the chained system
     smo3->addListener(lis2(61));
-    smo2->addListener(smo3update);
 
     unsigned long long i = 0;
 
@@ -137,13 +126,11 @@ int main()
 
         int x = 0;
 
-        while (x++ < 5)
-        {
             looptime = end - loopstart;
             loopstart = end;
             sysman.update(looptime);
             end = high_resolution_clock::now();
-        }
+
 
 //        ok &= vfunc[i%2](smo,CENUM::CSPEED);
         if(!ok)

@@ -5,30 +5,16 @@
 #include <unordered_map>
 #include "component.h"
 #include "system.h"
-//#include <string>
-//#include "Components/cspeed.h"
-//#include "Components/cposition.h"
-//#include "Components/cinput.h"
-//#include "Components/cactions.h"
-//#include "Components/csprite.h"
-//#include "Components/cbounds.h"
 #include "entities.h"
-//#include "Systems/smovement.h"
-//#include "Systems/sinput.h"
-//#include "Systems/sscenegraph.h"
 #include "ECS.h"
 #include <chrono>
-//#include <SFML/Window/Event.hpp>
-//#include <Aurora/Dispatch.hpp>
-//class Entities;
 namespace ECS
 {
 class SystemManager
 {
 
-    typedef std::unordered_map<ECS::ecsint,std::string> registerMap;
-    typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint,std::string,ECS::ecsint)> compFactoryFunction;
-    typedef std::function<std::unique_ptr<ECS::System> (ECS::ecsint,std::string,ECS::ecsint)> sysFactoryFunction;
+    typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint,ECS::ecsint)> compFactoryFunction;
+    typedef std::function<std::unique_ptr<ECS::System> (ECS::ecsint,ECS::ecsint)> sysFactoryFunction;
 
 
     typedef std::unique_ptr<Component> compUp;
@@ -45,109 +31,71 @@ public:
     ~SystemManager();
     const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component);
 
-
-    template<class T1,class T2,class T3>
-    /**
-     * @brief
-     *  Add factory generated system or component to the relevant map.
-     * @param bits
-     *  Logical ORed list of components/systems
-     * @param index
-     *  Entity ID
-     * @param mapType
-     *  The proper typedef for the maptype
-     * @param factory
-     *  The factory funcion
-     * @param map
-     *  The map
-     */
-    bool  addToMap(const ecsint &bits, const ecsint &index, const T1 &mapType, const T2 &factory,T3 &map)
+    using hilow = std::unordered_map<std::string,ECS::ecsint>;
+    hilow bounds(ECS::ecsint num)
     {
-        bool success = false;
-        for (const auto &st: mapType)
-        {
+        if (!num)
+            return hilow();
 
-            if((st.first & bits) == st.first)
+        ECS::ecsint hb = 1;
+        ECS::ecsint lb = 0;
+        ECS::ecsint tmp = num;
+        while (tmp >>= 1)
+            hb <<= 1;
+        for(int x = 1; x <= hb; x *=2)
+        {
+            if((x & num) == x)
             {
-//                mapUp[st.first] = factory(st.first,st.second,index);
-                if((map[index][st.first] = factory(st.first,st.second,index)))
-                    success = true;
+                lb = x;
+                break;
             }
         }
-//        map[index] = std::move(mapUp);
+        hilow ret;
+        ret["high"]=hb;
+        ret["low"]=lb;
+        return ret;
+    }
+
+    template<class T1,class T2>
+    bool  addToMap(const ecsint &bits, const ecsint &index, const T1 &factory,T2 &map)
+    {
+        hilow bnds = bounds(bits);
+
+        bool success = false;
+        for (int i = bnds.at("low");i<=bnds.at("high");)
+        {
+
+            if((i & bits) == i)
+            {
+                if((map[index][i] = factory(i,index)))
+                    success = true;
+            }
+            i!=0 ? i*=2 : i++;
+        }
         return success;
     }
 
     void update(const std::chrono::duration<double, std::nano> &time_span);
     void setSystemUpdate(bool update, ecsint sysid, ecsint eid);
 
-    /**
-     * @brief
-     *  Attaches a registered component to a system
-     * @param sys
-     *  The system object
-     * @param cid
-     *  The component ID
-     * @return bool
-     *  Returns false on failure
-     */
+
     bool attachComponent(System *sys, const ecsint cid);
 
-    /**
-     * @brief
-     *  Detaches an already attached component from a system
-     * @param sys
-     *  The system object
-     * @param cid
-     *  The component ID
-     * @return bool
-     *  False if there is no attached component by this ID
-     */
     bool detachComponent(System *sys, const ecsint cid);
 
 
-    template<class T1>
-    /**
-     * @brief
-     *  Registers a type, component or system
-     * @param id
-     *  The ID of component/system
-     * @param descriptive
-     *  A descriptive name for the component/system
-     * @param map
-     *  The map to operate on
-     * @return bool
-     *  False on failure
-     */
-    bool registerType(const ECS::ecsint id, const std::string &descriptive, T1 &map)
-    {
 
-        const auto it = map.find(id);
-        if(it == map.end())
-        {
-            map[id] = descriptive;
-            return true;
-        }
-        return false;
-    }
+
     ECS::ecsint entityCount();
     Component *getComponent(const ecsint eid, const ecsint cid);
     System *getSystem(const ecsint eid, const ecsint id);
-    const sysMap &systemMap() const;
-    sysMap &systemMap();
 
-    const compMap &componentMap() const;
-    compMap &componentMap();
-
-    const registerMap &compTypes() const;
-    registerMap &compTypes();
-
-    const registerMap &sysTypes() const;
-    registerMap &sysTypes();
 
 private:
-    registerMap m_compTypes;
-    registerMap m_sysTypes;
+    void addrefs(ECS::ecsint eid,System *sys)
+    {
+        sys->addRef(&m_componentMap[eid]);
+    }
     std::unique_ptr<Entities>m_entities{};
 
     compMap m_componentMap;

@@ -25,9 +25,9 @@ int main()
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
-    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
-    ok &= sysman.registerType(CENUM::CSPEED,"Position",sysman.compTypes());
-    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
+//    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+//    ok &= sysman.registerType(CENUM::CSPEED,"Position",sysman.compTypes());
+//    ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
 
     if(!ok)
         return(100);
@@ -42,8 +42,8 @@ int main()
         ECS::SMovement *smo = m_sysFact.getMovementSystem(ie,sysman);
         assert(smo);
 
-        ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
-        ok &= sysman.attachComponent(smo,CENUM::CSPEED);
+//        ok &= sysman.attachComponent(smo,CENUM::CPOSITION);
+//        ok &= sysman.attachComponent(smo,CENUM::CSPEED);
         if(!ok)
         {
             return(101);
