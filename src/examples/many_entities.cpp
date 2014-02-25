@@ -49,7 +49,7 @@ int main()
             return(101);
         }
         smo->setDelay(duration_cast<nanoseconds>(milliseconds(0)));
-        smo->build(ie);
+//        smo->build(ie);
     }
 
     unsigned long long i = 0;
@@ -80,7 +80,7 @@ int main()
     }
 
 
-    std::cout << "SMOVEMENT called: "<<SMovement::called<<std::endl;
+//    std::cout << "SMOVEMENT called: "<<SMovement::called<<std::endl;
     std::flush(std::cout);
     std::cerr<<"Total Time::"<<i<<"::"<<duration_cast<seconds>(timetaken).count()<<" seconds"<<std::endl;
     std::cerr<<"Total entities = "<<sysman.entityCount()<<std::endl;

@@ -24,7 +24,7 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
         return MAX;
     ecsint index = m_entities->addEntity(component);
     if(index == MAX)
-        throw std::exception();
+        return MAX;
     m_entities->setFlags(index,component,m_entities->m_components);
     bool success = true;
 
