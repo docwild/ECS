@@ -25,7 +25,7 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     ecsint index = m_entities->addEntity(component);
     if(index == MAX)
         throw std::exception();
-    m_entities->setComponents(index,component);
+    m_entities->setFlags(index,component,m_entities->m_components);
     bool success = true;
 
     success &= addToMap(component,index,m_compFact,m_componentMap);
