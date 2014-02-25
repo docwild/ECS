@@ -3,6 +3,16 @@ using namespace ECS;
 System::System(ecsint eid):m_entityId(eid)
 {
 }
+const System::CompMap * const System::cmap() const
+{
+    return m_cmap;
+}
+
+void System::setCmap(CompMap *cmap)
+{
+    m_cmap = cmap;
+}
+
 
 
 const std::string &System::name() const

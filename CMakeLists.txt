@@ -18,6 +18,10 @@ set(ITEMS
     src/myecs/smovement.h
     src/myecs/cinput.cpp
     src/myecs/cinput.h
+    src/myecs/cbounds.h
+    src/myecs/cbounds.cpp
+    src/myecs/sbounds.cpp
+    src/myecs/sbounds.h
 )
 
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
@@ -45,6 +49,9 @@ set(MANY
 set(BIGGER
     ${BIGGER}
     ${CMAKE_SOURCE_DIR}/src/examples/bigger.cpp
+)
+set(BOUNDS
+    ${CMAKE_SOURCE_DIR}/src/examples/bounding.cpp
 )
 set(TESTS
     ${TESTS}
@@ -80,9 +87,11 @@ if(BUILD_EXAMPLES)
     add_executable(simple ${SIMPLE})
     add_executable(bigger ${BIGGER})
     add_executable(manyents ${MANY})
+    add_executable(bounding ${BOUNDS})
     target_link_libraries(simple ecs myecs)
     target_link_libraries(bigger ecs myecs)
     target_link_libraries(manyents ecs myecs)
+    target_link_libraries(bounding ecs myecs)
 endif()
 option(BUILD_TESTS "Compile tests" OFF)
 if(BUILD_TESTS)

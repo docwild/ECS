@@ -2,6 +2,7 @@
 #include "cposition.h"
 #include "cspeed.h"
 #include "cinput.h"
+#include "cbounds.h"
 std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type,const ECS::ecsint eid) const
 {
     switch(type)
@@ -9,8 +10,8 @@ std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type,
 //    case CACTIONS:
 //        //        ra.reset(new ECS::CActions ());
 //        return std::unique_ptr<ECS::Component>(new ECS::CActions(name));
-//    case CBOUNDS:
-//        return std::unique_ptr<ECS::Component>(new ECS::CBounds(name));
+    case CBOUNDS:
+        return std::unique_ptr<ECS::Component>(new ECS::CBounds(eid));
     case CINPUT:
         return std::unique_ptr<ECS::Component>(new ECS::CInput(eid));
     case CPOSITION:

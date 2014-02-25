@@ -22,16 +22,16 @@ class CompFactTest : public ::testing::Test {
 // Tests that Speed isnt a nullptr
 TEST_F(CompFactTest, CheckSpd) {
 
-    cfup = cf(CENUM::CSPEED,"CSPEED",1);
+    cfup = cf(CENUM::CSPEED,1);
     ASSERT_NE(nullptr, cfup);
-    EXPECT_STREQ("CSPEED",cfup->name().c_str());
+    EXPECT_STREQ("Speed",cfup->name().c_str());
 }
 
 
 // Tests that Pos isnt a nullptr
 TEST_F(CompFactTest, CheckPos) {
-    std::string nm = "CPOSITION";
-    cfup = cf(CENUM::CPOSITION,nm,1);
+    std::string nm = "Position";
+    cfup = cf(CENUM::CPOSITION,1);
     ASSERT_NE(nullptr, cfup);
     EXPECT_STREQ(nm.c_str(),cfup->name().c_str())<< nm<<" = " << ::testing::PrintToString(cfup->name());
 }
@@ -39,7 +39,7 @@ TEST_F(CompFactTest, CheckPos) {
 // Tests that unknown is a nullptr
 TEST_F(CompFactTest, Checknull) {
 
-    cfup = cf(55,"UNKNOWN",1);
+    cfup = cf(55,1);
     ASSERT_EQ(nullptr, cfup);
 
 }
@@ -53,9 +53,9 @@ protected:
     {
 
 
-        ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
-        ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
-        ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
+//        ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());
+//        ok &= sysman.registerType(CENUM::CSPEED,"Speed",sysman.compTypes());
+//        ok &= sysman.registerType(SENUM::SMOVEMENT,"Movement",sysman.sysTypes());
     }
     bool ok{true};
     std::unique_ptr<ECS::System> sfup;
@@ -67,7 +67,7 @@ protected:
 
 TEST_F(SysFactTest, CheckMovement)
 {
-    sfup = sf(SENUM::SMOVEMENT,"SMOVEMENT",1);
+    sfup = sf(SENUM::SMOVEMENT,1);
     ASSERT_NE(nullptr,sfup);
 }
 TEST_F(SysFactTest, CheckSysMan)
@@ -91,8 +91,9 @@ TEST_F(SysFactTest,CheckTooManyEntities)
                                  CENUM::CPOSITION|CENUM::CSPEED);
         ASSERT_NE(p,MAX);
     }
-    ASSERT_THROW(int p = sysman.addEntity(SENUM::SMOVEMENT,
-                                          CENUM::CPOSITION|CENUM::CSPEED),std::exception);
+//    ASSERT_THROW(int p = sysman.addEntity(SENUM::SMOVEMENT,
+//                                          CENUM::CPOSITION|CENUM::CSPEED),std::exception);
+
 
 
 }

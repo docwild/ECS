@@ -19,6 +19,8 @@ std::unique_ptr<ECS::System> SystemFactory::operator()(const ECS::ecsint type,co
 //        return std::unique_ptr<ECS::System>(new ECS::SInput(name));
     case SMOVEMENT:
         return std::unique_ptr<ECS::System>(new ECS::SMovement(eid));
+    case SBOUNDS:
+        return std::unique_ptr<ECS::System>(new ECS::SBounds(eid));
     default:
         return nullptr;
     }
@@ -27,4 +29,9 @@ std::unique_ptr<ECS::System> SystemFactory::operator()(const ECS::ecsint type,co
 ECS::SMovement *SystemFactory::getMovementSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
 {
     return dynamic_cast<ECS::SMovement*>(sysman.getSystem(eid,SENUM::SMOVEMENT));
+}
+
+ECS::SBounds *SystemFactory::getBoundsSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+{
+    return dynamic_cast<ECS::SBounds*>(sysman.getSystem(eid,SENUM::SBOUNDS));
 }

@@ -31,6 +31,9 @@ public:
     typedef std::unordered_map<ecsint,compUp> CompMap;
 
 
+    const CompMap * const cmap() const;
+    void setCmap(CompMap *cmap);
+
 protected:
 
 
@@ -38,16 +41,16 @@ protected:
     void addRef(CompMap *cm)
     {
         m_cmap = cm;
-        for(auto &c:*m_cmap)
-        {
-            std::cout <<"c:"<<c.first<<std::endl;
-        }
+//        for(auto &c:*m_cmap)
+//        {
+////            std::cout <<"c:"<<c.first<<std::endl;
+//        }
     }
 
     std::string m_name{};
     std::chrono::duration<double, std::milli> m_delay{std::chrono::milliseconds(0)};
     std::chrono::duration<double, std::milli> m_delayCounter{std::chrono::milliseconds(0)};
-    CompMap *m_cmap;
+    const CompMap *m_cmap;
     ECS::ecsint m_entityId{};
     listype m_listenFunction{nullptr};
     bool m_update{true};
