@@ -79,6 +79,9 @@ set(TESTS
 set(SFMLEX1
     ${CMAKE_SOURCE_DIR}/src/examples/sfml1.cpp
 )
+set(SFMLEX2
+    ${CMAKE_SOURCE_DIR}/src/examples/sfml2.cpp
+)
 set(TESTSYSTEM
     ${CMAKE_SOURCE_DIR}/src/tests/testSystem.cpp
 )
@@ -121,6 +124,8 @@ if(BUILD_EXAMPLES)
       include_directories(${SFML_INCLUDE_DIR})
       add_executable(sfmlex1 ${SFMLEX1})
       target_link_libraries(sfmlex1 ${SFML_LIBRARIES} ecs myecs)
+      add_executable(sfmlex2 ${SFMLEX2})
+      target_link_libraries(sfmlex2 ${SFML_LIBRARIES} ecs myecs)
     endif()
 endif()
 option(BUILD_TESTS "Compile tests" OFF)

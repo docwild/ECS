@@ -44,29 +44,32 @@ int main(int argc, char* argv[])
 
     sdr->getSizeComponent()->setWidth(100);
     sdr->getSizeComponent()->setHeight(50);
-    sdr->makeRect();
+
     if(!ok)
     {
         return(101);
     }
     sysman.chainSystem(smo,sdr,std::bind(&SDraw::update,sdr));
     sysman.chainSystem(sdr,sbo,std::bind(&SBounds::update,sbo));
-//    sbo->setDelay(duration_cast<nanoseconds>(milliseconds(1000)));
+    //    sbo->setDelay(duration_cast<nanoseconds>(milliseconds(1000)));
     smo->setDelay(duration_cast<nanoseconds>(milliseconds(10)));
     smo->getPositionComponent()->setX(100);
     smo->getPositionComponent()->setY(200);
     smo->getSpeedComponent()->setDx(0.5);
 
     sf::RenderWindow App(sf::VideoMode(SIZEX, SIZEY), "myproject");
+    sdr->makeRect();
+    std::vector<SDraw*> sdr_vec{sdr};
+    //    sf::RectangleShape rectShape(sf::Vector2f(600,25));
 
-//    sf::RectangleShape rectShape(sf::Vector2f(600,25));
-
-//    rectShape.setOutlineColor(sf::Color(0,0,0,255));
-//    rectShape.setOutlineThickness(2);
+    //    rectShape.setOutlineColor(sf::Color(0,0,0,255));
+    //    rectShape.setOutlineThickness(2);
 
     duration<double,std::nano> looptime;
+    duration<double,std::nano> sfmltime;
     auto end = high_resolution_clock::now();
     auto loopstart = end;
+    sfmltime = duration_cast<nanoseconds>(seconds(0));
     duration<double,std::nano> timetaken;
     while (App.isOpen()) {
         sf::Event Event;
@@ -79,10 +82,18 @@ int main(int argc, char* argv[])
         loopstart = end;
         end = high_resolution_clock::now();
         sysman.update(looptime);
-//        rectShape.setPosition(smo->getPositionComponent()->getX(),smo->getPositionComponent()->getY());
-        App.clear();
-        App.draw(sdr->getRect());
-        App.display();
+        sfmltime+=looptime;
+        //        rectShape.setPosition(smo->getPositionComponent()->getX(),smo->getPositionComponent()->getY());
+        if(sfmltime > milliseconds(16))
+        {
+            App.clear();
+            for(auto s:sdr_vec)
+            {
+                App.draw(s->getRect());
+            }
+            App.display();
+            sfmltime = duration_cast<nanoseconds>(seconds(0));
+        }
     }
 }
 

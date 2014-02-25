@@ -1,7 +1,7 @@
 #include "sdraw.h"
 using namespace ECS;
 unsigned long long SDraw::counter=0;
-SDraw::SDraw(ECS::ecsint eid, ecsint sid):System(eid,sid),m_cSize(nullptr),m_cPosition(nullptr)
+SDraw::SDraw(ECS::ecsint eid, ecsint sid):System(eid,sid),m_cSize(nullptr),m_cPosition(nullptr),m_rectShape(nullptr)
 {
 }
 
@@ -11,6 +11,9 @@ void SDraw::update()
         return;
 //    std::cout<<"Draw"<<std::endl;
     m_rectShape->setPosition(m_cPosition->getX(),m_cPosition->getY());
+//    m_win->clear();
+
+//    m_win->display();
     if(m_listenFunction)
         m_listenFunction();
 }
@@ -59,7 +62,7 @@ void SDraw::makeRect()
 {
     if(m_cSize && m_cPosition && !m_rectShape)
     {
-        std::cout<<"no rect"<<std::endl;
+//        std::cout<<"no rect"<<std::endl;
         m_rectShape.reset(new sf::RectangleShape(sf::Vector2f(m_cSize->getWidth(),m_cSize->getHeight())));
     }
 }

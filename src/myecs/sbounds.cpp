@@ -1,7 +1,7 @@
 #include "sbounds.h"
 using namespace ECS;
 unsigned long long SBounds::counter=0;
-SBounds::SBounds(ecsint eid, ecsint sid):System(eid,sid),m_cPosition()
+SBounds::SBounds(ecsint eid, ecsint sid):System(eid,sid),m_cPosition(nullptr),m_cSize(nullptr),m_cSpeed(nullptr),m_cBounds(nullptr)
 {
 }
 
@@ -17,7 +17,7 @@ void SBounds::update()
         m_cSpeed->setX(0);
         m_cSpeed->setDx(-m_cSpeed->getDx());
     }
-    if(m_cPosition->getX()<m_cBounds->getX())
+    else if(m_cPosition->getX()<m_cBounds->getX())
     {
         m_cPosition->setX(m_cBounds->getX());
         m_cSpeed->setX(0);
@@ -29,7 +29,7 @@ void SBounds::update()
         m_cSpeed->setY(0);
         m_cSpeed->setDy(-m_cSpeed->getDy());
     }
-    if(m_cPosition->getY()<m_cBounds->getY())
+    else if(m_cPosition->getY()<m_cBounds->getY())
     {
         m_cPosition->setY(m_cBounds->getY());
         m_cSpeed->setY(0);
@@ -38,7 +38,8 @@ void SBounds::update()
 //    std::cout<<"Pos X:"<<m_cPosition->getX()<<std::endl;
 //    std::cout<<"Pos Y:"<<m_cPosition->getY()<<std::endl;
 
-
+    if(m_listenFunction)
+        m_listenFunction();
 
 }
 

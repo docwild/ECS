@@ -24,6 +24,7 @@ private:
     ECS::CPosition *m_cPosition;
 
     std::unique_ptr<sf::RectangleShape> m_rectShape{nullptr};
+    sf::RenderWindow *m_win;
 };
 }
 

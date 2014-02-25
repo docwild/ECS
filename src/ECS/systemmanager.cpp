@@ -77,6 +77,9 @@ void SystemManager::update(const std::chrono::duration<double, std::nano> &time_
         {
 
             //unordered map of systems indexed by system type id
+
+//            if(sys2.second->m_listenFunction)
+//                sys2.second->m_listenFunction();
             if(!sys2.second->m_update)
                 continue;
             if(sys2.second->m_delay != std::chrono::seconds(0))
