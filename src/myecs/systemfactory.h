@@ -3,10 +3,10 @@
 #include <memory>
 #include "../ECS/system.h"
 #include "../ECS/ECS.h"
-#include "smovement.h"
-#include "sbounds.h"
+#include "Systems/smovement.h"
+#include "Systems/sbounds.h"
 #ifdef DOSFML
-#include "sdraw.h"
+#include "Systems/sdraw.h"
 #endif
 #include "../ECS/systemmanager.h"
 enum SENUM:ECS::ecsint

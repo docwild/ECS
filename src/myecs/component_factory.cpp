@@ -1,9 +1,9 @@
 #include "component_factory.h"
-#include "cposition.h"
-#include "cspeed.h"
-#include "cinput.h"
-#include "cbounds.h"
-#include "csize.h"
+#include "Components/cposition.h"
+#include "Components/cspeed.h"
+#include "Components/cinput.h"
+#include "Components/cbounds.h"
+#include "Components/csize.h"
 std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type,const ECS::ecsint eid) const
 {
     switch(type)

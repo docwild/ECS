@@ -1,10 +1,10 @@
 #ifndef SBOUNDS_H
 #define SBOUNDS_H
-#include "../ECS/system.h"
-#include "cposition.h"
-#include "cbounds.h"
-#include "cspeed.h"
-#include "csize.h"
+#include "../../ECS/system.h"
+#include "../Components/cposition.h"
+#include "../Components/cbounds.h"
+#include "../Components/cspeed.h"
+#include "../Components/csize.h"
 namespace ECS
 {
 class SBounds : public System

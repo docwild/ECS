@@ -8,7 +8,7 @@
 
 #include "../myecs/component_factory.h"
 #include "../myecs/systemfactory.h"
-#include "../myecs/smovement.h"
+#include "../myecs/Systems/smovement.h"
 using namespace std;
 using namespace ECS;
 

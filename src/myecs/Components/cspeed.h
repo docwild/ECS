@@ -1,6 +1,6 @@
 #ifndef CSPEED_H
 #define CSPEED_H
-#include "../ECS/component.h"
+#include "../../ECS/component.h"
 #include <iostream>
 namespace ECS
 {

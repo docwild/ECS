@@ -1,6 +1,6 @@
 #ifndef POSITION_H
 #define POSITION_H
-#include "../ECS/component.h"
+#include "../../ECS/component.h"
 #include <iostream>
 namespace ECS
 {

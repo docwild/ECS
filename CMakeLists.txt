@@ -19,27 +19,27 @@ set(ITEMS
     src/myecs/component_factory.h
     src/myecs/systemfactory.cpp
     src/myecs/systemfactory.h
-    src/myecs/cposition.cpp
-    src/myecs/cposition.h
-    src/myecs/csize.cpp
-    src/myecs/csize.h
-    src/myecs/cspeed.cpp
-    src/myecs/cspeed.h
+    src/myecs/Components/cposition.cpp
+    src/myecs/Components/cposition.h
+    src/myecs/Components/csize.cpp
+    src/myecs/Components/csize.h
+    src/myecs/Components/cspeed.cpp
+    src/myecs/Components/cspeed.h
 
-    src/myecs/smovement.cpp
-    src/myecs/smovement.h
-    src/myecs/cinput.cpp
-    src/myecs/cinput.h
-    src/myecs/cbounds.h
-    src/myecs/cbounds.cpp
-    src/myecs/sbounds.cpp
-    src/myecs/sbounds.h
+    src/myecs/Systems/smovement.cpp
+    src/myecs/Systems/smovement.h
+    src/myecs/Components/cinput.cpp
+    src/myecs/Components/cinput.h
+    src/myecs/Components/cbounds.h
+    src/myecs/Components/cbounds.cpp
+    src/myecs/Systems/sbounds.cpp
+    src/myecs/Systems/sbounds.h
 )
 if(DOSFML)
     set(ITEMS
         ${ITEMS}
-    src/myecs/sdraw.cpp
-    src/myecs/sdraw.h
+    src/myecs/Systems/sdraw.cpp
+    src/myecs/Systems/sdraw.h
 )
 endif()
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")

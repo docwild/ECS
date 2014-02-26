@@ -1,6 +1,6 @@
 #ifndef CINPUT_H
 #define CINPUT_H
-#include "../ECS/component.h"
+#include "../../ECS/component.h"
 #include <vector>
 #include <map>
 

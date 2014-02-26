@@ -1,8 +1,8 @@
 #ifndef SMOVEMENT_H
 #define SMOVEMENT_H
-#include "../ECS/system.h"
-#include "cspeed.h"
-#include "cposition.h"
+#include "../../ECS/system.h"
+#include "../Components/cspeed.h"
+#include "../Components/cposition.h"
 
 namespace ECS
 {

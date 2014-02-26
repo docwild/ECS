@@ -1,6 +1,6 @@
 #ifndef CBOUNDS_H
 #define CBOUNDS_H
-#include "../ECS/component.h"
+#include "../../ECS/component.h"
 
 namespace ECS
 {

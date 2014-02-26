@@ -5,7 +5,7 @@
 
 #include "../myecs/component_factory.h"
 #include "../myecs/systemfactory.h"
-#include "../myecs/smovement.h"
+#include "../myecs/Systems/smovement.h"
 
 #include <functional>
 #include <chrono>

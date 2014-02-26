@@ -1,6 +1,6 @@
 #include "smovement.h"
-#include "cspeed.h"
-#include "cposition.h"
+#include "../Components/cspeed.h"
+#include "../Components/cposition.h"
 #include <cassert>
 using namespace ECS;
 unsigned long long SMovement::counter=0;

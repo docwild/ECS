@@ -1,8 +1,8 @@
 #ifndef SDRAW_H
 #define SDRAW_H
-#include "../ECS/system.h"
-#include "cposition.h"
-#include "csize.h"
+#include "../../ECS/system.h"
+#include "../Components/cposition.h"
+#include "../Components/csize.h"
 #include <SFML/Graphics.hpp>
 namespace ECS
 {

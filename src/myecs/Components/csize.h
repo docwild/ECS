@@ -1,6 +1,6 @@
 #ifndef CSIZE_H
 #define CSIZE_H
-#include "../ECS/component.h"
+#include "../../ECS/component.h"
 namespace ECS
 {
 class CSize : public Component
