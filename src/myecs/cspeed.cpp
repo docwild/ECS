@@ -44,3 +44,23 @@ void CSpeed::setDy(float value)
 }
 
 
+
+float CSpeed::getMx() const
+{
+    return mx;
+}
+
+void CSpeed::setMx(float value)
+{
+    mx = value;
+}
+float CSpeed::getMy() const
+{
+    return my;
+}
+
+void CSpeed::setMy(float value)
+{
+    my = value;
+}
+

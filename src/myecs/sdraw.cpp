@@ -10,9 +10,18 @@ void SDraw::update()
     if(!m_cPosition || !m_rectShape)
         return;
 //    std::cout<<"Draw"<<std::endl;
-    m_rectShape->setPosition(m_cPosition->getX(),m_cPosition->getY());
+
 //    m_win->clear();
 
+    if(m_lifetime == 0)
+    {
+        auto it = m_drMap->find(m_entityId);
+        if(it != m_drMap->end())
+            m_drMap->erase(it);
+        return;
+    }
+    m_rectShape->setPosition(m_cPosition->getX(),m_cPosition->getY());
+    m_lifetime--;
 //    m_win->display();
     if(m_listenFunction)
         m_listenFunction();

@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 
     const int SIZEX=800;
     const int SIZEY=600;
-    const ECS::ecsint MAX = 1000;
+    const ECS::ecsint MAX = 2000;
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
@@ -35,9 +35,11 @@ int main(int argc, char* argv[])
     std::random_device rd;
     std::uniform_int_distribution<int> ps_dist(0, 500);
     std::uniform_int_distribution<int> sz_dist(5, 5);
+    std::uniform_int_distribution<int> ms_dist(5, 20);
+    std::uniform_int_distribution<int> lt_dist(0, 1000);
     std::uniform_real_distribution<float> sp_dist(0.1, 5);
     std::vector<SDraw*> sdr_vec{};
-
+    std::unordered_map<ECS::ecsint, SDraw*>sdr_map{};
     while( true )
     {
         if(ie == MAX-1)
@@ -62,6 +64,8 @@ int main(int argc, char* argv[])
         sdr->getSizeComponent()->setWidth(sz_dist(rd));
         sdr->getSizeComponent()->setHeight(sz_dist(rd));
         sdr_vec.push_back(sdr);
+        sdr_map.emplace(ie,sdr);
+        sdr->init(sdr_map,lt_dist(rd));
         sysman.chainSystem(smo,sdr,std::bind(&SDraw::update,sdr));
         sysman.chainSystem(sdr,sbo,std::bind(&SBounds::update,sbo));
         //    sbo->setDelay(duration_cast<nanoseconds>(milliseconds(1000)));
@@ -70,6 +74,8 @@ int main(int argc, char* argv[])
         smo->getPositionComponent()->setY(ps_dist(rd));
         smo->getSpeedComponent()->setDx(sp_dist(rd));
         smo->getSpeedComponent()->setDy(sp_dist(rd));
+        smo->getSpeedComponent()->setMx(ms_dist(rd));
+        smo->getSpeedComponent()->setMy(ms_dist(rd));
         sdr->makeRect();
         //        smo->build(ie);
     }
@@ -108,9 +114,9 @@ int main(int argc, char* argv[])
         {
             App.clear();
 
-            for(auto s:sdr_vec)
+            for(auto s:sdr_map)
             {
-                App.draw(s->getRect());
+                App.draw(s.second->getRect());
             }
             App.display();
             sfmltime = duration_cast<nanoseconds>(seconds(0));

@@ -24,9 +24,9 @@ void SMovement::update()
         //        if(m_cPosition->getX() < 500)
         m_cPosition->setX(m_cPosition->getX()+m_cSpeed->getX());
         m_cPosition->setY(m_cPosition->getY()+m_cSpeed->getY());
-        if(m_cSpeed->getX() < 10 && m_cSpeed->getX() > -10)
+        if(m_cSpeed->getX() < m_cSpeed->getMx() && m_cSpeed->getX() > -m_cSpeed->getMx())
             m_cSpeed->setX(m_cSpeed->getX()+m_cSpeed->getDx());
-        if(m_cSpeed->getY() < 10 && m_cSpeed->getY() > -10)
+        if(m_cSpeed->getY() < m_cSpeed->getMy() && m_cSpeed->getY() > -m_cSpeed->getMy())
             m_cSpeed->setY(m_cSpeed->getY()+m_cSpeed->getDy());
         //        std::cout << m_cSpeed->name()<<" Speed X: "<<m_cSpeed->getX()<<std::endl;
 

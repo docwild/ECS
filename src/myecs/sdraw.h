@@ -18,13 +18,15 @@ public:
     void makeRect();
     ECS::CPosition *getPositionComponent()const{return m_cPosition;}
     ECS::CSize *getSizeComponent()const{return m_cSize;}
-    const sf::RectangleShape &getRect()const {return *m_rectShape.get();}
+    const sf::Drawable &getRect()const {return *m_rectShape.get();}
+    void init(std::unordered_map<ecsint,SDraw*> &drp,ecsint lt){m_drMap = &drp;m_lifetime=lt;}
 private:
     ECS::CSize *m_cSize;
     ECS::CPosition *m_cPosition;
-
+    std::unordered_map<ecsint,SDraw*> *m_drMap{nullptr};
     std::unique_ptr<sf::RectangleShape> m_rectShape{nullptr};
     sf::RenderWindow *m_win;
+    ecsint m_lifetime{0};
 };
 }
 
