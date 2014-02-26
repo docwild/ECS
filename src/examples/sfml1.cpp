@@ -58,8 +58,11 @@ int main(int argc, char* argv[])
     smo->getSpeedComponent()->setDx(0.5);
 
     sf::RenderWindow App(sf::VideoMode(SIZEX, SIZEY), "myproject");
+    std::unordered_map<ECS::ecsint, SDraw*>sdr_map{};
+    sdr_map.emplace(rect,sdr);
+    sdr->init(sdr_map,1000);
     sdr->makeRect();
-    std::vector<SDraw*> sdr_vec{sdr};
+//    std::vector<SDraw*> sdr_vec{sdr};
     //    sf::RectangleShape rectShape(sf::Vector2f(600,25));
 
     //    rectShape.setOutlineColor(sf::Color(0,0,0,255));
@@ -87,9 +90,9 @@ int main(int argc, char* argv[])
         if(sfmltime > milliseconds(16))
         {
             App.clear();
-            for(auto s:sdr_vec)
+            for(auto s:sdr_map)
             {
-                App.draw(s->getRect());
+                App.draw(s.second->getRect());
             }
             App.display();
             sfmltime = duration_cast<nanoseconds>(seconds(0));
