@@ -66,6 +66,8 @@ add_definitions(-DDOSFMLFULL)
     src/myecs/Systems/smovement-sfmlfull.h
     src/myecs/Systems/sbounds-sfmlfull.cpp
     src/myecs/Systems/sbounds-sfmlfull.h
+src/myecs/Components/caction.cpp
+src/myecs/Components/caction.h
 )
 endif(NOT DOSFML AND NOT DOSFMLFULL)
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")

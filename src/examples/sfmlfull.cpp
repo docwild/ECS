@@ -9,6 +9,8 @@
 #include "../myecs/component_factory.h"
 #include "../myecs/systemfactory.h"
 #include "../myecs/Systems/smovement-sfmlfull.h"
+
+#include "../myecs/Components/caction.h"
 using namespace std;
 using namespace ECS;
 
@@ -26,7 +28,7 @@ int main(int argc, char* argv[])
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
     const ECS::ecsint rect = sysman.addEntity(SMOVEMENT|SDRAW|SBOUNDS,
-                                              CPOSITION|CSPEED|CSIZE|CBOUNDS);
+                                              CPOSITION|CSPEED|CSIZE|CBOUNDS|CACTIONS);
 
 
     ECS::SMovement *smo = m_sysFact.getMovementSystem(rect,sysman);
@@ -42,8 +44,15 @@ int main(int argc, char* argv[])
     cb->setY(0);
     cb->setY1(SIZEY);
 
-    sdr->getSizeComponent()->setWidth(50);
-    sdr->getSizeComponent()->setHeight(50);
+    CAction *ca = static_cast<CAction*>(sysman.getComponent(rect,CACTIONS));
+    assert(ca);
+    ca->setActions("LEFT",false);
+    ca->setActions("RIGHT",false);
+    ca->setActions("UP",false);
+    ca->setActions("DOWN",false);
+
+    sdr->getSizeComponent()->setWidth(10);
+    sdr->getSizeComponent()->setHeight(10);
 
     if(!ok)
     {
@@ -55,10 +64,10 @@ int main(int argc, char* argv[])
     smo->setDelay(duration_cast<nanoseconds>(milliseconds(1000/60)));
     smo->getPositionComponent()->setX(100);
     smo->getPositionComponent()->setY(200);
-    smo->getSpeedComponent()->setDx(0.5);
-    smo->getSpeedComponent()->setMx(10);
-    smo->getSpeedComponent()->setDy(0.1);
-    smo->getSpeedComponent()->setMy(5);
+    smo->getSpeedComponent()->setDx(0.0);
+    smo->getSpeedComponent()->setMx(0.5);
+    smo->getSpeedComponent()->setDy(0.0);
+    smo->getSpeedComponent()->setMy(0.5);
 
     sf::RenderWindow App(sf::VideoMode(SIZEX, SIZEY), "myproject");
     std::unordered_map<ECS::ecsint, SDraw*>sdr_map{};
@@ -84,6 +93,23 @@ int main(int argc, char* argv[])
                 App.close();
 
         }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            ca->setActions("LEFT",true);
+        else
+            ca->setActions("LEFT",false);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            ca->setActions("RIGHT",true);
+        else
+            ca->setActions("RIGHT",false);
+
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            ca->setActions("UP",true);
+        else
+            ca->setActions("UP",false);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            ca->setActions("DOWN",true);
+        else
+            ca->setActions("DOWN",false);
         looptime = end - loopstart;
         loopstart = end;
         end = high_resolution_clock::now();

@@ -14,26 +14,26 @@ void SBounds::update()
     if(m_cPosition->getX()>m_cBounds->getX1()-m_cSize->getWidth())
     {
         m_cPosition->setX(m_cBounds->getX1()-m_cSize->getWidth());
-        m_cSpeed->setX(0);
-        m_cSpeed->setDx(-m_cSpeed->getDx());
+//        m_cSpeed->setX(0);
+        m_cSpeed->setX(-m_cSpeed->getX());
     }
     else if(m_cPosition->getX()<m_cBounds->getX())
     {
         m_cPosition->setX(m_cBounds->getX());
-        m_cSpeed->setX(0);
-        m_cSpeed->setDx(-m_cSpeed->getDx());
+//        m_cSpeed->setX(0);
+        m_cSpeed->setX(-m_cSpeed->getX());
     }
     if(m_cPosition->getY()>m_cBounds->getY1()-m_cSize->getHeight())
     {
         m_cPosition->setY(m_cBounds->getY1()-m_cSize->getHeight());
-        m_cSpeed->setY(0);
-        m_cSpeed->setDy(-m_cSpeed->getDy());
+//        m_cSpeed->setY(0);
+        m_cSpeed->setY(-m_cSpeed->getY());
     }
     else if(m_cPosition->getY()<m_cBounds->getY())
     {
         m_cPosition->setY(m_cBounds->getY());
-        m_cSpeed->setY(0);
-        m_cSpeed->setDy(-m_cSpeed->getDy());
+//        m_cSpeed->setY(0);
+        m_cSpeed->setY(-m_cSpeed->getY());
     }
 //    std::cout<<"Pos X:"<<m_cPosition->getX()<<std::endl;
 //    std::cout<<"Pos Y:"<<m_cPosition->getY()<<std::endl;

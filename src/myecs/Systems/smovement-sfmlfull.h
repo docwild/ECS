@@ -3,6 +3,7 @@
 #include "../../ECS/system.h"
 #include "../Components/cspeed.h"
 #include "../Components/cposition.h"
+#include "../Components/caction.h"
 
 namespace ECS
 {
@@ -24,6 +25,7 @@ public:
 private:
     ECS::CSpeed *m_cSpeed;
     ECS::CPosition *m_cPosition;
+    ECS::CAction *m_cAction;
 };
 }
 #endif // SMOVEMENT_H

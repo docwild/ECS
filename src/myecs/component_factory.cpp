@@ -3,14 +3,14 @@
 #include "Components/cspeed.h"
 #include "Components/cinput.h"
 #include "Components/cbounds.h"
+#include "Components/caction.h"
 #include "Components/csize.h"
 std::unique_ptr<ECS::Component> CompFactory::operator() (const ECS::ecsint type,const ECS::ecsint eid) const
 {
     switch(type)
     {
-//    case CACTIONS:
-//        //        ra.reset(new ECS::CActions ());
-//        return std::unique_ptr<ECS::Component>(new ECS::CActions(name));
+    case CACTIONS:
+        return std::unique_ptr<ECS::Component>(new ECS::CAction(eid,CACTIONS));
     case CBOUNDS:
         return std::unique_ptr<ECS::Component>(new ECS::CBounds(eid,CBOUNDS));
     case CINPUT:
