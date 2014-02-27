@@ -5,20 +5,17 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 #Find any version 2.X of SFML
 #See the FindSFML.cmake file for additional details and instructions
-if(DOSFML)
+if(DOSFML OR DOSFMLFULL)
     find_package(SFML 2 REQUIRED system window graphics network audio)
-    add_definitions(-DDOSFML)
-endif()
+
+endif(DOSFML OR DOSFMLFULL)
 
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 message("BUILD TYPE= " ${CMAKE_BUILD_TYPE})
 #-DCMAKE_BUILD_TYPE=Debug
 set(ITEMS
     ${ITEMS}
-    src/myecs/component_factory.cpp
-    src/myecs/component_factory.h
-    src/myecs/systemfactory.cpp
-    src/myecs/systemfactory.h
+
     src/myecs/Components/cposition.cpp
     src/myecs/Components/cposition.h
     src/myecs/Components/csize.cpp
@@ -26,22 +23,51 @@ set(ITEMS
     src/myecs/Components/cspeed.cpp
     src/myecs/Components/cspeed.h
 
-    src/myecs/Systems/smovement.cpp
-    src/myecs/Systems/smovement.h
     src/myecs/Components/cinput.cpp
     src/myecs/Components/cinput.h
     src/myecs/Components/cbounds.h
     src/myecs/Components/cbounds.cpp
+
+    src/myecs/component_factory.cpp
+    src/myecs/component_factory.h
+    src/myecs/systemfactory.cpp
+    src/myecs/systemfactory.h
+)
+if(NOT DOSFML AND NOT DOSFMLFULL)
+    set(ITEMS
+        ${ITEMS}
+
+    src/myecs/Systems/smovement.cpp
+    src/myecs/Systems/smovement.h
     src/myecs/Systems/sbounds.cpp
     src/myecs/Systems/sbounds.h
 )
-if(DOSFML)
+
+elseif(DOSFML)
+add_definitions(-DDOSFML)
     set(ITEMS
         ${ITEMS}
+
+
     src/myecs/Systems/sdraw.cpp
     src/myecs/Systems/sdraw.h
+    src/myecs/Systems/smovement.cpp
+    src/myecs/Systems/smovement.h
+    src/myecs/Systems/sbounds.cpp
+    src/myecs/Systems/sbounds.h
 )
-endif()
+elseif(DOSFMLFULL)
+add_definitions(-DDOSFMLFULL)
+    set(ITEMS
+        ${ITEMS}
+    src/myecs/Systems/sdraw-sfmlfull.cpp
+    src/myecs/Systems/sdraw-sfmlfull.h
+    src/myecs/Systems/smovement-sfmlfull.cpp
+    src/myecs/Systems/smovement-sfmlfull.h
+    src/myecs/Systems/sbounds-sfmlfull.cpp
+    src/myecs/Systems/sbounds-sfmlfull.h
+)
+endif(NOT DOSFML AND NOT DOSFMLFULL)
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 #aux_source_directory(./ECS ECS_LIST)
 set(ECS_LIST
@@ -82,14 +108,17 @@ set(SFMLEX1
 set(SFMLEX2
     ${CMAKE_SOURCE_DIR}/src/examples/sfml2.cpp
 )
+set(SFMLFULL
+    ${CMAKE_SOURCE_DIR}/src/examples/sfmlfull.cpp
+)
 set(TESTSYSTEM
     ${CMAKE_SOURCE_DIR}/src/tests/testSystem.cpp
 )
 add_library(ecs SHARED ${ECS_LIST})
 add_library(myecs ${ITEMS} )
-if(DOSFML)
+if(DOSFML OR DOSFMLFULL)
     target_link_libraries(myecs ${SFML_LIBRARIES})
-endif()
+endif(DOSFML OR DOSFMLFULL)
 #-- Add an Option to toggle the generation of the API documentation
 option(BUILD_DOCUMENTATION "Use Doxygen to create the HTML based API documentation" OFF)
 if(BUILD_DOCUMENTATION)
@@ -107,9 +136,10 @@ if(BUILD_DOCUMENTATION)
                                                                                 SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
   # IF you do NOT want the documentation to be generated EVERY time you build the project
   # then leave out the 'ALL' keyword from the above command.
-endif()
+endif(BUILD_DOCUMENTATION)
 option(BUILD_EXAMPLES "Compile test programs" ON)
 option(DOSFML "Compile test programs" OFF)
+option(DOSFMLFULL "Compile full sfml program" OFF)
 if(BUILD_EXAMPLES)
 #add_definitions(-DCTEST)
     add_executable(simple ${SIMPLE})
@@ -126,8 +156,13 @@ if(BUILD_EXAMPLES)
       target_link_libraries(sfmlex1 ${SFML_LIBRARIES} ecs myecs)
       add_executable(sfmlex2 ${SFMLEX2})
       target_link_libraries(sfmlex2 ${SFML_LIBRARIES} ecs myecs)
-    endif()
-endif()
+    endif(DOSFML)
+    if(DOSFMLFULL)
+          include_directories(${SFML_INCLUDE_DIR})
+          add_executable(sfmlfull ${SFMLFULL})
+          target_link_libraries(sfmlfull ${SFML_LIBRARIES} ecs myecs)
+    endif(DOSFMLFULL)
+endif(BUILD_EXAMPLES)
 option(BUILD_TESTS "Compile tests" OFF)
 if(BUILD_TESTS)
     add_definitions(-DUNITTEST)
@@ -135,7 +170,7 @@ if(BUILD_TESTS)
     add_executable(testSystem ${TESTSYSTEM})
     target_link_libraries(test1 ecs myecs -lgtest -lgtest_main)
     target_link_libraries(testSystem ecs myecs -lgtest -lgtest_main -lgmock -lgmock_main -lpthread)
-endif()
+endif(BUILD_TESTS)
 
 
 

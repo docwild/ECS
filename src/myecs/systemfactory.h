@@ -3,8 +3,14 @@
 #include <memory>
 #include "../ECS/system.h"
 #include "../ECS/ECS.h"
+#ifdef DOSFMLFULL
+#include "Systems/smovement-sfmlfull.h"
+#include "Systems/sbounds-sfmlfull.h"
+#include "Systems/sdraw-sfmlfull.h"
+#else
 #include "Systems/smovement.h"
 #include "Systems/sbounds.h"
+#endif
 #ifdef DOSFML
 #include "Systems/sdraw.h"
 #endif
@@ -26,7 +32,7 @@ public:
     std::unique_ptr<ECS::System> operator() (const ECS::ecsint type,const ECS::ecsint eid) const;
     ECS::SMovement *getMovementSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
     ECS::SBounds *getBoundsSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
-#ifdef DOSFML
+#if defined(DOSFML) || defined(DOSFMLFULL)
     ECS::SDraw *getDrawSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
 #endif
 };
