@@ -78,8 +78,8 @@ ${ECS_LIST}
     src/ECS/component.h
     src/ECS/system.cpp
     src/ECS/system.h
-    src/ECS/entities.cpp
-    src/ECS/entities.h
+ #   src/ECS/entities.cpp
+#    src/ECS/entities.h
     src/ECS/systemmanager.cpp
     src/ECS/systemmanager.h
 )

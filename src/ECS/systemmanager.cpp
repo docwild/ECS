@@ -7,9 +7,9 @@ using namespace ECS;
 
 
 SystemManager::SystemManager(const ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact)
-    :MAX(MAX),m_componentMap(),m_systemMap(),m_compFact(compFact),m_sysFact(sysFact)
+    :MAX(MAX),m_componentMap(),m_systemMap(),m_compFact(compFact),m_sysFact(sysFact),m_components(MAX)
 {
-    m_entities.reset( new Entities(MAX));
+//    m_entities.reset( new Entities(MAX));
 }
 
 SystemManager::~SystemManager()
@@ -22,10 +22,10 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
 {
     if(component == 0)
         return MAX;
-    ecsint index = m_entities->addEntity(component);
+    ecsint index = ++TOP;
     if(index == MAX)
         return MAX;
-    m_entities->setFlags(index,component,m_entities->m_components);
+    setFlags(index,component,m_components);
     bool success = true;
 
     success &= addToMap(component,index,m_compFact,m_componentMap);
@@ -42,6 +42,16 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     if(success)
         return index;
     return MAX;
+}
+
+const bool SystemManager::removeEntity(const ecsint id)
+{
+    if (id < m_components.size())
+    {
+        m_components[id] = 0;
+        return true;
+    }
+    return false;
 }
 
 SystemManager::hilow SystemManager::bounds(ecsint num)
@@ -165,7 +175,7 @@ bool SystemManager::detachSystem(const ecsint eid, const ecsint sysid)
 
 ecsint SystemManager::entityCount()
 {
-    return m_entities->m_components.size();
+    return m_components.size();
 }
 
 Component *SystemManager::getComponent(const ecsint eid, const ecsint cid)

@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include "component.h"
 #include "system.h"
-#include "entities.h"
+//#include "entities.h"
 #include "ECS.h"
 #include <chrono>
 namespace ECS
@@ -30,6 +30,7 @@ public:
     explicit SystemManager(const ECS::ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact);
     ~SystemManager();
     const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component);
+    const bool removeEntity(const ecsint id);
 
     using hilow = std::unordered_map<std::string,ECS::ecsint>;
     hilow bounds(ECS::ecsint num);
@@ -71,12 +72,43 @@ public:
 
 
 private:
+    template<class T>
+    void setFlags(const ecsint &index, const ecsint &flags, T &vec)
+    {
+        vec[index] |= flags;
+    }
+
+    template<class T>
+    void removeFlags(const ecsint &index, const ecsint &flags, T &vec)
+    {
+        vec[index] &= (~flags);
+    }
+
+    template<class T>
+    void toggleFlags(const ecsint &flags, const ecsint &index,T &vec)
+    {
+        vec[index] ^= flags;
+    }
+
+    template<class T>
+    const bool hasFlags(const ecsint &index, const T &vec) const
+    {
+        return vec[index]!=0;
+    }
+
+    template<class T>
+    const bool hasFlags(const ecsint &index,const ecsint &flags, const T &vec) const
+    {
+        return ((vec[index] & flags));
+    }
+    ecsint TOP{0};
+    std::vector<ecsint> m_components{};
     void setSystemUpdate(bool update, ecsint sysid, ecsint eid);
     void addrefs(ECS::ecsint eid,System *sys)
     {
         sys->addRef(&m_componentMap[eid]);
     }
-    std::unique_ptr<Entities>m_entities{};
+//    std::unique_ptr<Entities>m_entities{};
 
     compMap m_componentMap;
     sysMap m_systemMap;
