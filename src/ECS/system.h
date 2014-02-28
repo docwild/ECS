@@ -12,7 +12,7 @@ namespace ECS
 class System
 {
 public:
-    friend class SystemManager;
+    friend class EntityManager;
 #ifdef UNITTEST
 #endif
     typedef std::function<void()> listype;

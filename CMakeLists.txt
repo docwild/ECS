@@ -80,8 +80,8 @@ ${ECS_LIST}
     src/ECS/system.h
  #   src/ECS/entities.cpp
 #    src/ECS/entities.h
-    src/ECS/systemmanager.cpp
-    src/ECS/systemmanager.h
+    src/ECS/entitymanager.cpp
+    src/ECS/entitymanager.h
 )
 #aux_source_directory(./Systems SRC_LIST)
 #aux_source_directory(./Components SRC_LIST)

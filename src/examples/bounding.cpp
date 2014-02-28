@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include "../ECS/ECS.h"
-#include "../ECS/systemmanager.h"
+#include "../ECS/entitymanager.h"
 
 #include "../myecs/component_factory.h"
 #include "../myecs/systemfactory.h"
@@ -22,7 +22,7 @@ int main()
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
-    SystemManager sysman(MAX,m_compFact,m_sysFact);
+    EntityManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
     //    ok &= sysman.registerType(CENUM::CPOSITION,"Position",sysman.compTypes());

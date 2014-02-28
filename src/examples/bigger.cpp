@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include "../ECS/ECS.h"
-#include "../ECS/systemmanager.h"
+#include "../ECS/entitymanager.h"
 
 #include "../myecs/component_factory.h"
 #include "../myecs/systemfactory.h"
@@ -51,7 +51,7 @@ int main()
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
-    SystemManager sysman(MAX,m_compFact,m_sysFact);
+    EntityManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
 
 
@@ -94,8 +94,8 @@ int main()
     //sysman.setSystemUpdate(false,SENUM::SMOVEMENT,smo3->entityId());
 
     typedef std::function<bool (System*,ECS::ecsint)> func;
-    auto funcptr = std::bind(&SystemManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
-    auto funcptr2 = std::bind(&SystemManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
+    auto funcptr = std::bind(&EntityManager::detachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
+    auto funcptr2 = std::bind(&EntityManager::attachComponent, &sysman, std::placeholders::_1, std::placeholders::_2);
     std::vector<func> vfunc{funcptr,funcptr2};
 
     MyListener lis;

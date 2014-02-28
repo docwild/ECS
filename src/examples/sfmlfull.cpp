@@ -4,7 +4,7 @@
 #include <cassert>
 #include <SFML/Graphics.hpp>
 #include "../ECS/ECS.h"
-#include "../ECS/systemmanager.h"
+#include "../ECS/entitymanager.h"
 
 #include "../myecs/component_factory.h"
 #include "../myecs/systemfactory.h"
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
-    SystemManager sysman(MAX,m_compFact,m_sysFact);
+    EntityManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
     const ECS::ecsint player = sysman.addEntity(SMOVEMENT|SDRAW|SBOUNDS,
                                                 CPOSITION|CSPEED|CSIZE|CBOUNDS|CACTIONS);

@@ -1,4 +1,4 @@
-#include "systemmanager.h"
+#include "entitymanager.h"
 #include <iostream>
 #include <cassert>
 using namespace ECS;
@@ -6,19 +6,19 @@ using namespace ECS;
 
 
 
-SystemManager::SystemManager(const ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact)
+EntityManager::EntityManager(const ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact)
     :MAX(MAX),m_componentMap(),m_systemMap(),m_compFact(compFact),m_sysFact(sysFact),m_components(MAX)
 {
 //    m_entities.reset( new Entities(MAX));
 }
 
-SystemManager::~SystemManager()
+EntityManager::~EntityManager()
 {
 
 
 }
 
-const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &component)
+const ecsint EntityManager::addEntity(const ecsint &systems, const ecsint &component)
 {
     if(component == 0)
         return MAX;
@@ -44,7 +44,7 @@ const ecsint SystemManager::addEntity(const ecsint &systems, const ecsint &compo
     return MAX;
 }
 
-const bool SystemManager::removeEntity(const ecsint id)
+const bool EntityManager::removeEntity(const ecsint id)
 {
     if (id < m_components.size())
     {
@@ -54,7 +54,7 @@ const bool SystemManager::removeEntity(const ecsint id)
     return false;
 }
 
-SystemManager::hilow SystemManager::bounds(ecsint num)
+EntityManager::hilow EntityManager::bounds(ecsint num)
 {
     if (!num)
         return hilow();
@@ -78,7 +78,7 @@ SystemManager::hilow SystemManager::bounds(ecsint num)
     return ret;
 }
 
-void SystemManager::update(const std::chrono::duration<double, std::nano> &time_span)
+void EntityManager::update(const std::chrono::duration<double, std::nano> &time_span)
 {
     for(auto &sys: m_systemMap)
     {
@@ -113,7 +113,7 @@ void SystemManager::update(const std::chrono::duration<double, std::nano> &time_
 
 }
 
-void SystemManager::chainSystem(System *sys, System *sys2,const std::function<void ()> &func)
+void EntityManager::chainSystem(System *sys, System *sys2,const std::function<void ()> &func)
 {
     detachSystem(sys2->m_entityId,sys2->m_systemId);
     sys->addListener(func);
@@ -121,12 +121,12 @@ void SystemManager::chainSystem(System *sys, System *sys2,const std::function<vo
 
 
 
-void SystemManager::setSystemUpdate(bool update,ECS::ecsint sysid,ECS::ecsint eid)
+void EntityManager::setSystemUpdate(bool update,ECS::ecsint sysid,ECS::ecsint eid)
 {
     getSystem(eid,sysid)->m_update = update;
 }
 
-bool SystemManager::attachComponent(System *sys, const ecsint cid)
+bool EntityManager::attachComponent(System *sys, const ecsint cid)
 {
     Component *c = getComponent(sys->entityId(),cid);
     if(!c)
@@ -139,12 +139,12 @@ bool SystemManager::attachComponent(System *sys, const ecsint cid)
     return sys->attachComponent(cid,c);
 }
 
-bool SystemManager::detachComponent(System *sys, const ecsint cid)
+bool EntityManager::detachComponent(System *sys, const ecsint cid)
 {
     return sys->detachComponent(cid);
 }
 
-bool SystemManager::attachSystem(const ecsint eid, const ecsint sysid)
+bool EntityManager::attachSystem(const ecsint eid, const ecsint sysid)
 {
     auto bnds = bounds(sysid);
     bool ret = false;
@@ -167,23 +167,23 @@ bool SystemManager::attachSystem(const ecsint eid, const ecsint sysid)
     return ret;
 }
 
-bool SystemManager::detachSystem(const ecsint eid, const ecsint sysid)
+bool EntityManager::detachSystem(const ecsint eid, const ecsint sysid)
 {
     setSystemUpdate(false,sysid,eid);
     return true;
 }
 
-ecsint SystemManager::entityCount()
+ecsint EntityManager::entityCount()
 {
     return m_components.size();
 }
 
-Component *SystemManager::getComponent(const ecsint eid, const ecsint cid)
+Component *EntityManager::getComponent(const ecsint eid, const ecsint cid)
 {
     return m_componentMap[eid][cid].get();
 }
 
-System *SystemManager::getSystem(const ecsint eid, const ecsint id)
+System *EntityManager::getSystem(const ecsint eid, const ecsint id)
 {
     return m_systemMap[eid][id].get();
 }

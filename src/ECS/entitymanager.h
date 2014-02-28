@@ -10,7 +10,7 @@
 #include <chrono>
 namespace ECS
 {
-class SystemManager
+class EntityManager
 {
 
     typedef std::function<std::unique_ptr<ECS::Component> (ECS::ecsint,ECS::ecsint)> compFactoryFunction;
@@ -27,8 +27,8 @@ public:
     typedef std::unordered_map<ecsint,compMapUP> compMap;
     typedef std::unordered_map<ecsint,sysMapUP> sysMap;
 
-    explicit SystemManager(const ECS::ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact);
-    ~SystemManager();
+    explicit EntityManager(const ECS::ecsint MAX, const compFactoryFunction &compFact, const sysFactoryFunction &sysFact);
+    ~EntityManager();
     const ECS::ecsint addEntity(const ecsint &systems, const ecsint &component);
     const bool removeEntity(const ecsint id);
 

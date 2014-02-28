@@ -30,17 +30,17 @@ std::unique_ptr<ECS::System> SystemFactory::operator()(const ECS::ecsint type,co
     }
 }
 
-ECS::SMovement *SystemFactory::getMovementSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+ECS::SMovement *SystemFactory::getMovementSystem(const ECS::ecsint eid, ECS::EntityManager &sysman)
 {
     return dynamic_cast<ECS::SMovement*>(sysman.getSystem(eid,SENUM::SMOVEMENT));
 }
 
-ECS::SBounds *SystemFactory::getBoundsSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+ECS::SBounds *SystemFactory::getBoundsSystem(const ECS::ecsint eid, ECS::EntityManager &sysman)
 {
     return dynamic_cast<ECS::SBounds*>(sysman.getSystem(eid,SENUM::SBOUNDS));
 }
 #if defined(DOSFML) || defined(DOSFMLFULL)
-ECS::SDraw *SystemFactory::getDrawSystem(const ECS::ecsint eid, ECS::SystemManager &sysman)
+ECS::SDraw *SystemFactory::getDrawSystem(const ECS::ecsint eid, ECS::EntityManager &sysman)
 {
     return dynamic_cast<ECS::SDraw*>(sysman.getSystem(eid,SENUM::SDRAW));
 }

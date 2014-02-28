@@ -14,7 +14,7 @@
 #ifdef DOSFML
 #include "Systems/sdraw.h"
 #endif
-#include "../ECS/systemmanager.h"
+#include "../ECS/entitymanager.h"
 enum SENUM:ECS::ecsint
 {
 
@@ -30,10 +30,10 @@ class SystemFactory
 {
 public:
     std::unique_ptr<ECS::System> operator() (const ECS::ecsint type,const ECS::ecsint eid) const;
-    ECS::SMovement *getMovementSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
-    ECS::SBounds *getBoundsSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
+    ECS::SMovement *getMovementSystem(const ECS::ecsint eid,ECS::EntityManager &sysman);
+    ECS::SBounds *getBoundsSystem(const ECS::ecsint eid,ECS::EntityManager &sysman);
 #if defined(DOSFML) || defined(DOSFMLFULL)
-    ECS::SDraw *getDrawSystem(const ECS::ecsint eid,ECS::SystemManager &sysman);
+    ECS::SDraw *getDrawSystem(const ECS::ecsint eid,ECS::EntityManager &sysman);
 #endif
 };
 
