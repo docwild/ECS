@@ -21,21 +21,59 @@ int main(int argc, char* argv[])
 
     const int SIZEX=800;
     const int SIZEY=600;
-    const ECS::ecsint MAX = 5;
+    const ECS::ecsint MAX = 500;
     CompFactory m_compFact;
 
     SystemFactory m_sysFact;
     SystemManager sysman(MAX,m_compFact,m_sysFact);
     bool ok = true;
-    const ECS::ecsint rect = sysman.addEntity(SMOVEMENT|SDRAW|SBOUNDS,
-                                              CPOSITION|CSPEED|CSIZE|CBOUNDS|CACTIONS);
+    const ECS::ecsint player = sysman.addEntity(SMOVEMENT|SDRAW|SBOUNDS,
+                                                CPOSITION|CSPEED|CSIZE|CBOUNDS|CACTIONS);
+    std::unordered_map<ECS::ecsint, SDraw*>sdr_map{};
+
+    std::random_device rd;
+    std::uniform_int_distribution<int> disty(0, 590);
+    std::uniform_int_distribution<int> distx(0, 790);
+
+    ECS::ecsint nonplayer = sysman.addEntity(SDRAW,
+                                                   CPOSITION|CSIZE);
+    while(nonplayer < MAX)
+    {
+
+        ECS::SDraw *sdrn = m_sysFact.getDrawSystem(nonplayer,sysman);
+        assert(sdrn);
+//        ECS::SBounds *sbon = m_sysFact.getBoundsSystem(nonplayer,sysman);
+//        assert(sbon);
+
+//        CBounds *cb = sbon->cBounds();
+//        cb->setX(0);
+//        cb->setX1(SIZEX);
+//        cb->setY(0);
+//        cb->setY1(SIZEY);
+        sdrn->getSizeComponent()->setWidth(5);
+        sdrn->getSizeComponent()->setHeight(5);
+
+//        sysman.chainSystem(sdrn,sbon,std::bind(&SBounds::update,sbon));
+        sdrn->setDelay(duration_cast<nanoseconds>(milliseconds(100)));
+
+        CPosition *cp = static_cast<CPosition*>(sysman.getComponent(nonplayer,CPOSITION));
+        cp->setX(distx(rd));
+        cp->setY(disty(rd));
 
 
-    ECS::SMovement *smo = m_sysFact.getMovementSystem(rect,sysman);
+
+        sdr_map.emplace(nonplayer,sdrn);
+        sdrn->init(sdr_map);
+        sdrn->makeRect();
+        nonplayer = sysman.addEntity(SDRAW|SBOUNDS,
+                                     CPOSITION|CSIZE|CBOUNDS);
+    }
+
+    ECS::SMovement *smo = m_sysFact.getMovementSystem(player,sysman);
     assert(smo);
-    ECS::SDraw *sdr = m_sysFact.getDrawSystem(rect,sysman);
+    ECS::SDraw *sdr = m_sysFact.getDrawSystem(player,sysman);
     assert(sdr);
-    ECS::SBounds *sbo = m_sysFact.getBoundsSystem(rect,sysman);
+    ECS::SBounds *sbo = m_sysFact.getBoundsSystem(player,sysman);
     assert(sbo);
 
     CBounds *cb = sbo->cBounds();
@@ -44,7 +82,9 @@ int main(int argc, char* argv[])
     cb->setY(0);
     cb->setY1(SIZEY);
 
-    CAction *ca = static_cast<CAction*>(sysman.getComponent(rect,CACTIONS));
+
+
+    CAction *ca = static_cast<CAction*>(sysman.getComponent(player,CACTIONS));
     assert(ca);
     ca->setActions("LEFT",false);
     ca->setActions("RIGHT",false);
@@ -54,27 +94,33 @@ int main(int argc, char* argv[])
     sdr->getSizeComponent()->setWidth(10);
     sdr->getSizeComponent()->setHeight(10);
 
-    if(!ok)
-    {
-        return(101);
-    }
+
+
     sysman.chainSystem(smo,sdr,std::bind(&SDraw::update,sdr));
     sysman.chainSystem(sdr,sbo,std::bind(&SBounds::update,sbo));
     //    sbo->setDelay(duration_cast<nanoseconds>(milliseconds(1000)));
     smo->setDelay(duration_cast<nanoseconds>(milliseconds(1000/60)));
+
+
+
     smo->getPositionComponent()->setX(100);
     smo->getPositionComponent()->setY(200);
+
+
     smo->getSpeedComponent()->setDx(0.0);
     smo->getSpeedComponent()->setMx(0.5);
     smo->getSpeedComponent()->setDy(0.0);
     smo->getSpeedComponent()->setMy(0.5);
 
     sf::RenderWindow App(sf::VideoMode(SIZEX, SIZEY), "myproject");
-    std::unordered_map<ECS::ecsint, SDraw*>sdr_map{};
-    sdr_map.emplace(rect,sdr);
+
+    sdr_map.emplace(player,sdr);
     sdr->init(sdr_map);
+
+
     sdr->makeRect();
-//    std::vector<SDraw*> sdr_vec{sdr};
+
+    //    std::vector<SDraw*> sdr_vec{sdr};
     //    sf::RectangleShape rectShape(sf::Vector2f(600,25));
 
     //    rectShape.setOutlineColor(sf::Color(0,0,0,255));
