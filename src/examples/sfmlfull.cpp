@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
     duration<double,std::nano> sfmltime;
     auto end = high_resolution_clock::now();
     auto loopstart = end;
-    sfmltime = duration_cast<nanoseconds>(seconds(0));
+
     duration<double,std::nano> timetaken;
     while (App.isOpen()) {
         sf::Event Event;
@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
         loopstart = end;
         end = high_resolution_clock::now();
         sysman.update(looptime);
-        sfmltime+=looptime;
+
         //        rectShape.setPosition(smo->getPositionComponent()->getX(),smo->getPositionComponent()->getY());
         if(SDraw::draw_flag)
         {
@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
                 App.draw(s.second->getRect());
             }
             App.display();
-            sfmltime = duration_cast<nanoseconds>(seconds(0));
+
             SDraw::draw_flag=false;
         }
     }
